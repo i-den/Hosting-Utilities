@@ -1,0 +1,13 @@
+#! /bin/bash
+echo -e "+++++++++++++++++++++++++++++++" "\n"
+echo -e "A rec:"
+axerino="$(dig $1 A | grep -w A | tail -1 | awk '{print $5}')"
+echo $axerino
+echo -e "$(dig -x $axerino | grep -w PTR | tail -1 | awk '{print $5}')\n"
+echo -e "NS:"
+echo -e "$(dig $1 NS | grep NS | tail -2 | awk '{print $5}')" "\n"
+echo -e "MX rec:"
+mxerino="$(dig $1 MX | grep MX | tail -2 | awk '{print $6}')"
+echo $mxerino
+echo -e "$(dig $mxerino A | grep -w A | tail -1 | awk '{print $5}')" "\n"
+echo -e "+++++++++++++++++++++++++++++++"
