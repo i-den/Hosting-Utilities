@@ -1,0 +1,18 @@
+#! /bin/bash
+
+
+read -p "Old string: " oldstring
+read -p "New string: " newstring
+
+echo "$oldstring -> $newstring"
+
+read
+
+files=$(grep -r -l -i "$oldstring" ./*);
+
+for i in $files;
+do
+	sed -i "s/$oldstring/$newstring/g" $i;
+done
+
+echo -e "$oldstring -> $newstring in \n${files[@]}"
