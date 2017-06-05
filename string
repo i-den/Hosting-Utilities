@@ -1,5 +1,4 @@
 #! /bin/bash
-
 read -p "Old string: " oldstring
 read -p "New string: " newstring
 
