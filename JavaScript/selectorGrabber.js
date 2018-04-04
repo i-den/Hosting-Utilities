@@ -5,7 +5,7 @@
  *       \ V  V /  __/ |_) | |  _  | (_) \__ \ |_  |  _| (_| | (_|  __/
  *        \_/\_/ \___|_.__/  |_| |_|\___/|___/\__| |_|  \__,_|\___\___|
  *
- *                       PHP Extension Grabber v1.1
+ *                       PHP Extension Grabber v1.2
  */
 
 var grabber = (function defineGrabber() {
@@ -68,10 +68,35 @@ var grabber = (function defineGrabber() {
             console.log(msgs.sort().join(""), ...css);
         }
 
+        function help() {
+            var $_$ = ` __        __   _       _   _           _     _____              
+ \\ \\      / /__| |__   | | | | ___  ___| |_  |  ___|_ _  ___ ___ 
+  \\ \\ /\\ / / _ \\ '_ \\  | |_| |/ _ \\/ __| __| | |_ / _\` |/ __/ _ \\
+   \\ V  V /  __/ |_) | |  _  | (_) \\__ \\ |_  |  _| (_| | (_|  __/
+    \\_/\\_/ \\___|_.__/  |_| |_|\\___/|___/\\__| |_|  \\__,_|\\___\\___|
+                                                                 
+                    PHP Extension Grabber v1.1`;
+
+            console.log($_$);
+            console.log("%c \\-- Select PHP Version from the Top Left dropdown, then ", style + "color: #8daed6;");
+            console.log("  |-- grabber.add54() - %c All Extensions for PHP 5.4 are added to a JSON", "color: green;");
+            console.log("  |-- grabber.add55() --  grabber.add56() --  grabber.add70() --  grabber.add71() --  grabber.add72()");
+
+            console.log("%c \\-- This will remove all stored PHP Extensions for a version that were stored in the JSON ", style + "color: #8daed6;");
+            console.log("  |-- grabber.rm54() - %c All Extensions for PHP 5.4 are removed from the JSON", "color: green;");
+            console.log("  |-- grabber.rm55() --  grabber.rm56() --  grabber.rm70() --  grabber.rm71() --  grabber.rm72()");
+
+            console.log("%c \\-- Utilities  ", style + "color: #8daed6;");
+            console.log("  |-- grabber.v() - %c List all PHP Versions that you saved", "color: green;" );
+            console.log("  |-- grabber.clear() - %c Clears the JSON", "color: green;");
+            console.log("  |-- grabber.getJSON() - %c Gets the JSON to Paste in the VPS' Console", "color: green;");
+        }
+
         return Object.freeze({
             logErr: logError,
             logInfo: logInfo,
-            logStoredVersionExts: logStoredVersionExts
+            logStoredVersionExts: logStoredVersionExts,
+            help: help
         });
     }());
 
@@ -242,6 +267,8 @@ var grabber = (function defineGrabber() {
             return JSON.stringify(allPHPExtensions);
         }
     }
+
+    (function displayHelp() { _logger.help() }());
 
     return Object.freeze({
         add54: add54,
