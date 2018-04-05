@@ -80,12 +80,36 @@ var installer = (function defineInstaller() {
 
 
     var logger = (function defineLogger() {
+        var style = "background: #444853; border-radius: 2px; line-height: 18px;";
 
+        function logExtensions(extArr, msg) {
+            var css = [];
+            extArr = extArr.map(e => {
+                css.push(style + "color: white; margin: 1px;");
+                return `%c ${e} `;
+            });
+
+            console.log(`%c  |-- ${msg}: `, style + "color: #8daed6;");
+            console.log(extArr.join(""), ...css);
+        }
+
+        function logWarnings(ver, warnings) {
+            console.log(`%c   Warnings for ${ver.substr(0, 3).toUpperCase()} ${ver.slice(-2)}    `, style + "color: red;");
+            warnings.forEach(function (warning) {
+                console.log(`%c ${warning}`, style + "color: red;")
+            });
+        }
+
+        return {
+            logExtensions: logExtensions,
+            logWarnings: logWarnings
+        }
     }());
 
     var enabler = (function defineEnabler() {
         function isEnabled(phpExtID) {
-            return document.getElementById(phpExtID).getAttribute("aria-checked") === "true";
+            var attr = document.getElementById(phpExtID).getAttribute("aria-checked");
+            return attr === "true" || attr === "Unaffected";
         }
 
         function enableExt(phpExtID) {
@@ -106,7 +130,15 @@ var installer = (function defineInstaller() {
     // if any are in add info -> notice
     // if any are in notAva -> notice
     function install(phpExtJSON) {
-        var cPanPHPVersInfo = JSON.parse(phpExtJSON);
+        var cPanPHPVersInfo = JSON.parse(phpExtJSON),
+            warnings = {
+                php54: [],
+                php55: [],
+                php56: [],
+                php70: [],
+                php71: [],
+                php72: []
+            };
 
         cPanPHPVersInfo.forEach(function (cPanelPHPVerInfo) {
             var predefInfo,
@@ -115,7 +147,6 @@ var installer = (function defineInstaller() {
                     alwaysInstalled: [],
                     alreadyInstalled: [],
                     currentlyInstalled: [],
-                    additionalInfo: [],
                     notAvailableOnVPS: []
                 };
 
@@ -124,6 +155,28 @@ var installer = (function defineInstaller() {
                     predefInfo = versInfo.php54;
                     break;
             }
+
+            // INSTALL CPAN EXTS
+            cPanelPHPVerInfo.extensions.forEach(function (currExtName) {
+                if (predefInfo.notAvailableOnVPS.includes(currExtName)) {
+                    // NOT AVAIL ON VPS INFO
+                    loggerInfo.notAvailableOnVPS.push(currExtName);
+                } else if (predefInfo.installedByDefault.includes(currExtName)) {
+                    // ALREADY INSTALL BY DEF
+                    loggerInfo.alreadyInstalled.push(currExtName);
+                } else if (Object.keys(predefInfo.additionalInfo).includes(currExtName)) {
+                    // SPECIAL CASES - ffmpeg, ImageMagick, etc
+                    warnings["php" + cPanelPHPVerInfo.version].push(predefInfo.additionalInfo[currExtName]);
+                } else {
+                    let extId = predefInfo.map[currExtName];
+                    if (!enabler.isEnabled(extId)) {
+                        extIdsToInstall.push(extId);
+                        loggerInfo.currentlyInstalled.push(currExtName);
+                    } else {
+                        loggerInfo.alreadyInstalled.push(currExtName);
+                    }
+                }
+            });
 
             // ALWAYS INSTALL
             for (let extName in predefInfo.alwaysInstall) {
@@ -140,29 +193,33 @@ var installer = (function defineInstaller() {
                 }
             }
 
-            // INSTALL CPAN EXTS
-            cPanelPHPVerInfo.extensions.forEach(function (currExtName) {
-                if (predefInfo.notAvailableOnVPS.includes(currExtName)) {
-                    // NOT AVAIL ON VPS INFO
-                    loggerInfo.notAvailableOnVPS.push(currExtName);
-                } else if (predefInfo.installedByDefault.includes(currExtName)) {
-                    // ALREADY INSTALL BY DEF
-                    loggerInfo.alreadyInstalled.push(currExtName);
-                } else if (Object.keys(predefInfo.additionalInfo).includes(currExtName)) {
-                    // SPECIAL CASES - ffmpeg, ImageMagick, etc
-                    loggerInfo.additionalInfo.push(currExtName);
-                } else {
-                    let extId = predefInfo.map[currExtName];
-                    if (!enabler.isEnabled(extId)) {
-                        extIdsToInstall.push(extId);
-                        loggerInfo.currentlyInstalled.push(currExtName);
-                    } else {
-                        loggerInfo.alreadyInstalled.push(currExtName);
-                    }
-                }
+            extIdsToInstall.forEach(function (id) {
+                enabler.enableExt(id);
             });
 
-            extIdsToInstall.forEach(e => {console.log(e); enabler.enableExt(e)});
+            console.log("%c \\-- Info for PHP " + cPanelPHPVerInfo.version + " ", "background: #444853; border-radius: 2px; line-height: 18px; color: #b6d580;");
+            if (loggerInfo.alwaysInstalled.length > 0) {
+                logger.logExtensions(loggerInfo.alwaysInstalled, "Extensions installed to work normally");
+            }
+
+            if (loggerInfo.alreadyInstalled.length > 0) {
+                logger.logExtensions(loggerInfo.alreadyInstalled, "Extensions that were already installed on the VPS");
+            }
+
+            if (loggerInfo.currentlyInstalled.length > 0) {
+                logger.logExtensions(loggerInfo.currentlyInstalled, "Extensions enabled for installation from cPanel")
+            }
+
+            if (loggerInfo.notAvailableOnVPS.length > 0) {
+                logger.logExtensions(loggerInfo.notAvailableOnVPS, "!! NOT AVAILABLE ON VPS !!");
+            }
+            console.log("");
+        });
+
+        Object.keys(warnings).forEach(function (currPhpWarn) {
+            if (warnings[currPhpWarn].length > 0) {
+                logger.logWarnings(currPhpWarn, warnings[currPhpWarn]);
+            }
         })
     }
 
