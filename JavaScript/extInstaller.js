@@ -100,9 +100,31 @@ var installer = (function defineInstaller() {
             });
         }
 
+        function logError(msg) {
+            console.log(`%c   ${msg}    `, style + "color: red;");
+        }
+
+        function help() {
+            {let $_$ = ` __        __   _       _   _           _     _____              
+ \\ \\      / /__| |__   | | | | ___  ___| |_  |  ___|_ _  ___ ___ 
+  \\ \\ /\\ / / _ \\ '_ \\  | |_| |/ _ \\/ __| __| | |_ / _\` |/ __/ _ \\
+   \\ V  V /  __/ |_) | |  _  | (_) \\__ \\ |_  |  _| (_| | (_|  __/
+    \\_/\\_/ \\___|_.__/  |_| |_|\\___/|___/\\__| |_|  \\__,_|\\___\\___|
+                                                                 
+                    PHP Extension Installer v1.0`;
+
+                console.log($_$);
+            }
+
+            console.log("%c \\-- Copy the JSON from cPanel -> Select PHP Version, then ", style + "color: #8daed6;");
+            console.log("  |-- installer.install(`JSON_GOES_HERE`) - %c The (` `) ARE MANDATORY", "color: green;");
+        }
+
         return {
             logExtensions: logExtensions,
-            logWarnings: logWarnings
+            logWarnings: logWarnings,
+            help: help,
+            logErr: logError
         }
     }());
 
@@ -130,6 +152,11 @@ var installer = (function defineInstaller() {
     // if any are in add info -> notice
     // if any are in notAva -> notice
     function install(phpExtJSON) {
+        if (document.getElementById("pageSize_select").selectedOptions[0].text !== "All") {
+            logger.logErr("SELECT ALL FROM Page Size");
+            return;
+        }
+
         var cPanPHPVersInfo = JSON.parse(phpExtJSON),
             warnings = {
                 php54: [],
@@ -213,6 +240,7 @@ var installer = (function defineInstaller() {
             if (loggerInfo.notAvailableOnVPS.length > 0) {
                 logger.logExtensions(loggerInfo.notAvailableOnVPS, "!! NOT AVAILABLE ON VPS !!");
             }
+
             console.log("");
         });
 
@@ -222,6 +250,8 @@ var installer = (function defineInstaller() {
             }
         })
     }
+
+    (function displayHelp() { logger.help() }());
 
     return {
         install: install
