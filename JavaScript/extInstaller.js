@@ -10,8 +10,11 @@
 
 var installer = (function defineInstaller() {
     "use strict";
+    var _predefinedPHPVersInfo,
+        _logger,
+        _enabler;
 
-    var _predefinedPHPVersInfo = {
+    _predefinedPHPVersInfo = {
         php54: {
             alwaysInstall: {
                 "bz2": "switch_ea-php54-php-bz2",
@@ -245,10 +248,61 @@ var installer = (function defineInstaller() {
                 "pdo_sqlsrv", "propro", "raphf", "rar", "redis", "solr", "sqlsrv", "ssh2", "stats", "suhosin", "sysvmsg",
                 "sysvsem", "sysvshm", "timezonedb", "trader", "uploadprogress", "uuid", "vips", "yaf", "xdebug", "yaml", "yaz", "zmq"
             ]
+        },
+        php71: {
+            alwaysInstall: {
+                "bz2": "switch_ea-php71-php-bz2",
+                "calendar": "switch_ea-php71-php-calendar",
+                "curl": "switch_ea-php71-php-curl",
+                "exif": "switch_ea-php71-php-exif",
+                "ftp": "switch_ea-php71-php-ftp",
+                "gettext": "switch_ea-php71-php-gettext",
+                "gmp": "switch_ea-php71-php-gmp",
+                "iconv": "switch_ea-php71-php-iconv"
+            },
+            map: {
+                "bcmath": "switch_ea-php71-php-bcmath",
+                "dba": "switch_ea-php71-php-dba",
+                "enchant": "switch_ea-php71-php-enchant",
+                "fileinfo": "switch_ea-php71-php-fileinfo",
+                "gd": "switch_ea-php71-php-gd",
+                "imap": "switch_ea-php71-php-imap",
+                "intl": "switch_ea-php71-php-intl",
+                "ldap": "switch_ea-php71-php-ldap",
+                "mbstring": "switch_ea-php71-php-mbstring",
+                "mcrypt": "switch_ea-php71-php-mcrypt",
+                "mysqlnd": "switch_ea-php71-php-mysqlnd",
+                "odbc": "switch_ea-php71-php-odbc",
+                "opcache": "switch_ea-php71-php-opcache",
+                "pdo": "switch_ea-php71-php-pdo",
+                "pgsql": "switch_ea-php71-php-pgsql",
+                "phalcon3": "switch_ea-php71-php-phalcon",
+                "posix": "switch_ea-php71-php-posix",
+                "pspell": "switch_ea-php71-php-pspell",
+                "snmp": "switch_ea-php71-php-snmp",
+                "soap": "switch_ea-php71-php-soap",
+                "sockets": "switch_ea-php71-php-sockets",
+                "tidy": "switch_ea-php71-php-tidy",
+                "xmlrpc": "switch_ea-php71-php-xmlrpc",
+                "zip": "switch_ea-php71-php-zip"
+            },
+            installedByDefault: ["dom", "phar", "xsl", "json", "wddx", "xmlreader", "xmlwriter"],
+            additionalInfo: {
+                "imagick": "IMAGICK Needs Installation for PHP 7.1 - yum install ImageMagick-devel | WHM -> Module Installers -> PHP Pecl [Manage] -> imagick",
+                "ioncube_loader": "IONCUBE NEEDED for PHP 7.0 - WHM -> Tweak Settings -> PHP -> cPanel PHP loader -> ioncube"
+            },
+            notAvailableOnVPS: [
+                "libxml", "brotli", "dbase", "eio", "gender", "geoip", "gmagick", "gnupg", "htscanner", "http",
+                "igbinary", "inotify", "interbase", "libsodium", "lzf", "mailparse", "memcached", "mongodb",
+                "mysqli", "nd_mysqli", "nd_pdo_mysql", "oauth", "oci8", "pdo_dblib", "pdo_firebird", "pdo_mysql",
+                "pdo_oci", "pdo_odbc", "pdo_pgsql", "pdo_sqlite", "pdo_sqlsrv", "propro", "raphf", "rar", "redis",
+                "solr", "sourceguardian", "sqlsrv", "ssh2", "stats", "suhosin", "sysvmsg", "sysvsem", "sysvshm",
+                "timezonedb", "trader", "uploadprogress", "uuid", "vips", "xdebug", "yaf", "yaml", "zmq"
+            ]
         }
     };
 
-    var logger = (function defineLogger() {
+    _logger = (function defineLogger() {
         var style = "background: #444853; border-radius: 2px; line-height: 18px;";
 
         function logExtensions(extArr, msg) {
@@ -298,7 +352,7 @@ var installer = (function defineInstaller() {
         }
     }());
 
-    var enabler = (function defineEnabler() {
+    _enabler = (function defineEnabler() {
         function isEnabled(phpExtID) {
             var attr = document.getElementById(phpExtID).getAttribute("aria-checked");
             return attr === "true" || attr === "Unaffected" || attr === "Install";
@@ -316,7 +370,7 @@ var installer = (function defineInstaller() {
 
     function install(phpExtJSON) {
         if (document.getElementById("pageSize_select").selectedOptions[0].text !== "All") {
-            logger.logErr("SELECT ALL FROM Page Size");
+            _logger.logErr("SELECT ALL FROM Page Size");
             return;
         }
 
@@ -368,7 +422,7 @@ var installer = (function defineInstaller() {
                     warnings["php" + currcPanelPHPVerInfo.version].push(currPredPHPVerInfo.additionalInfo[currExtName]);
                 } else {
                     let extId = currPredPHPVerInfo.map[currExtName];
-                    if (!enabler.isEnabled(extId)) {
+                    if (!_enabler.isEnabled(extId)) {
                         extIdsToInstall.push(extId);
                         loggerInfo.currentlyInstalled.push(currExtName);
                     } else {
@@ -377,9 +431,9 @@ var installer = (function defineInstaller() {
                 }
             });
 
-            Object.keys(currPredPHPVerInfo.alwaysInstall).forEach(function nn(extName) {
+            Object.keys(currPredPHPVerInfo.alwaysInstall).forEach(function (extName) {
                 var extId = currPredPHPVerInfo.alwaysInstall[extName];
-                if (!enabler.isEnabled(extId)) {
+                if (!_enabler.isEnabled(extId)) {
                     extIdsToInstall.push(extId);
                     loggerInfo.alwaysInstalled.push(extName);
                 } else {
@@ -388,24 +442,24 @@ var installer = (function defineInstaller() {
             });
 
             extIdsToInstall.forEach(function (id) {
-                enabler.enableExt(id);
+                _enabler.enableExt(id);
             });
 
             console.log("%c \\-- Info for PHP " + currcPanelPHPVerInfo.version + " ", "background: #444853; border-radius: 2px; line-height: 18px; color: #b6d580;");
             if (loggerInfo.alwaysInstalled.length > 0) {
-                logger.logExtensions(loggerInfo.alwaysInstalled, "Extensions installed to work normally");
+                _logger.logExtensions(loggerInfo.alwaysInstalled, "Extensions installed to work normally");
             }
 
             if (loggerInfo.alreadyInstalled.length > 0) {
-                logger.logExtensions(loggerInfo.alreadyInstalled, "Extensions that were already installed on the VPS");
+                _logger.logExtensions(loggerInfo.alreadyInstalled, "Extensions that were already installed on the VPS");
             }
 
             if (loggerInfo.currentlyInstalled.length > 0) {
-                logger.logExtensions(loggerInfo.currentlyInstalled, "Extensions enabled for installation from cPanel")
+                _logger.logExtensions(loggerInfo.currentlyInstalled, "Extensions enabled for installation from cPanel")
             }
 
             if (loggerInfo.notAvailableOnVPS.length > 0) {
-                logger.logExtensions(loggerInfo.notAvailableOnVPS, "!! NOT AVAILABLE ON VPS !!");
+                _logger.logExtensions(loggerInfo.notAvailableOnVPS, "!! NOT AVAILABLE ON VPS !!");
             }
 
             console.log("");
@@ -413,13 +467,13 @@ var installer = (function defineInstaller() {
 
         Object.keys(warnings).forEach(function (currPhpWarn) {
             if (warnings[currPhpWarn].length > 0) {
-                logger.logWarnings(currPhpWarn, warnings[currPhpWarn]);
+                _logger.logWarnings(currPhpWarn, warnings[currPhpWarn]);
             }
         })
     }
 
     (function displayHelp() {
-        logger.help()
+        _logger.help()
     }());
 
     return {
