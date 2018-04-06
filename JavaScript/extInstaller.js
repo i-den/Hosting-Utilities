@@ -5,7 +5,7 @@
  *       \ V  V /  __/ |_) | |  _  | (_) \__ \ |_  |  _| (_| | (_|  __/
  *        \_/\_/ \___|_.__/  |_| |_|\___/|___/\__| |_|  \__,_|\___\___|
  *
- *                     PHP Extension Installer v1.0
+ *                     PHP Extension Installer v1.1
  */
 
 var installer = (function defineInstaller() {
@@ -281,7 +281,7 @@ var installer = (function defineInstaller() {
    \\ V  V /  __/ |_) | |  _  | (_) \\__ \\ |_  |  _| (_| | (_|  __/
     \\_/\\_/ \\___|_.__/  |_| |_|\\___/|___/\\__| |_|  \\__,_|\\___\\___|
                                                                  
-                    PHP Extension Installer v1.0`;
+                    PHP Extension Installer v1.1`;
 
                 console.log($_$);
             }
