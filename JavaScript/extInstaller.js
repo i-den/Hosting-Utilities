@@ -11,8 +11,8 @@
 var installer = (function defineInstaller() {
     "use strict";
 
-    var versInfo = (function defineManager() {
-        var php54 = {
+    var _predefinedPHPVersInfo = {
+        php54: {
             alwaysInstall: {
                 "bz2": "switch_ea-php54-php-bz2",
                 "calendar": "switch_ea-php54-php-calendar",
@@ -71,9 +71,8 @@ var installer = (function defineInstaller() {
                 "translit", "uploadprogress", "uri_template", "uuid", "weakref", "xcache", "xcache_3", "xdebug",
                 "xrange", "yaf", "yaml", "yaz", "zend_guard_loader", "zmq"
             ]
-        };
-
-        var php55 = {
+        },
+        php55: {
             alwaysInstall: {
                 "bz2": "switch_ea-php55-php-bz2",
                 "calendar": "switch_ea-php55-php-calendar",
@@ -133,9 +132,8 @@ var installer = (function defineInstaller() {
                 "sysvshm", "timezonedb", "trader", "translit", "uploadprogress", "uri_template", "uuid",
                 "weakref", "xcache_3", "xdebug", "xrange", "yaf", "yaml", "yaz", "zend_guard_loader", "zmq"
             ]
-        };
-
-        var php56 = {
+        },
+        php56: {
             alwaysInstall: {
                 "bz2": "switch_ea-php56-php-bz2",
                 "calendar": "switch_ea-php56-php-calendar",
@@ -195,9 +193,8 @@ var installer = (function defineInstaller() {
                 "trader", "translit", "uploadprogress", "uri_template", "uuid", "weakref", "xcache_3", "xdebug",
                 "xrange", "yaml", "yaz", "zend_guard_loader", "zmq"
             ]
-        };
-
-        var php70 = {
+        },
+        php70: {
             alwaysInstall: {
                 "bz2": "switch_ea-php70-php-bz2",
                 "calendar": "switch_ea-php70-php-calendar",
@@ -248,16 +245,8 @@ var installer = (function defineInstaller() {
                 "pdo_sqlsrv", "propro", "raphf", "rar", "redis", "solr", "sqlsrv", "ssh2", "stats", "suhosin", "sysvmsg",
                 "sysvsem", "sysvshm", "timezonedb", "trader", "uploadprogress", "uuid", "vips", "yaf", "xdebug", "yaml", "yaz", "zmq"
             ]
-        };
-
-        return {
-            php54: php54,
-            php55: php55,
-            php56: php56,
-            php70: php70
         }
-    }());
-
+    };
 
     var logger = (function defineLogger() {
         var style = "background: #444853; border-radius: 2px; line-height: 18px;";
@@ -312,7 +301,7 @@ var installer = (function defineInstaller() {
     var enabler = (function defineEnabler() {
         function isEnabled(phpExtID) {
             var attr = document.getElementById(phpExtID).getAttribute("aria-checked");
-            return attr === "true" || attr === "Unaffected";
+            return attr === "true" || attr === "Unaffected" || attr === "Install";
         }
 
         function enableExt(phpExtID) {
@@ -325,13 +314,6 @@ var installer = (function defineInstaller() {
         }
     }());
 
-    // parse JSON
-    // foreach ver:
-    // install alwaysInstall
-    // forEach exts -> install them
-    // if any are installedByDef - notice
-    // if any are in add info -> notice
-    // if any are in notAva -> notice
     function install(phpExtJSON) {
         if (document.getElementById("pageSize_select").selectedOptions[0].text !== "All") {
             logger.logErr("SELECT ALL FROM Page Size");
@@ -348,8 +330,8 @@ var installer = (function defineInstaller() {
                 php72: []
             };
 
-        cPanPHPVersInfo.forEach(function (cPanelPHPVerInfo) {
-            var predefInfo,
+        cPanPHPVersInfo.forEach(function (currcPanelPHPVerInfo) {
+            var currPredPHPVerInfo,
                 extIdsToInstall = [],
                 loggerInfo = {
                     alwaysInstalled: [],
@@ -358,34 +340,34 @@ var installer = (function defineInstaller() {
                     notAvailableOnVPS: []
                 };
 
-            switch (cPanelPHPVerInfo.version) {
+            switch (currcPanelPHPVerInfo.version) {
                 case 54:
-                    predefInfo = versInfo.php54;
+                    currPredPHPVerInfo = _predefinedPHPVersInfo.php54;
                     break;
                 case 55:
-                    predefInfo = versInfo.php55;
+                    currPredPHPVerInfo = _predefinedPHPVersInfo.php55;
                     break;
                 case 56:
-                    predefInfo = versInfo.php56;
+                    currPredPHPVerInfo = _predefinedPHPVersInfo.php56;
                     break;
                 case 70:
-                    predefInfo = versInfo.php70;
+                    currPredPHPVerInfo = _predefinedPHPVersInfo.php70;
                     break;
             }
 
-            // INSTALL CPAN EXTS
-            cPanelPHPVerInfo.extensions.forEach(function (currExtName) {
-                if (predefInfo.notAvailableOnVPS.includes(currExtName)) {
+            // INSTALL EXTENSIONS FROM CPANEL
+            currcPanelPHPVerInfo.extensions.forEach(function (currExtName) {
+                if (currPredPHPVerInfo.notAvailableOnVPS.includes(currExtName)) {
                     // NOT AVAIL ON VPS INFO
                     loggerInfo.notAvailableOnVPS.push(currExtName);
-                } else if (predefInfo.installedByDefault.includes(currExtName)) {
+                } else if (currPredPHPVerInfo.installedByDefault.includes(currExtName)) {
                     // ALREADY INSTALL BY DEF
                     loggerInfo.alreadyInstalled.push(currExtName);
-                } else if (Object.keys(predefInfo.additionalInfo).includes(currExtName)) {
+                } else if (Object.keys(currPredPHPVerInfo.additionalInfo).includes(currExtName)) {
                     // SPECIAL CASES - ffmpeg, ImageMagick, etc
-                    warnings["php" + cPanelPHPVerInfo.version].push(predefInfo.additionalInfo[currExtName]);
+                    warnings["php" + currcPanelPHPVerInfo.version].push(currPredPHPVerInfo.additionalInfo[currExtName]);
                 } else {
-                    let extId = predefInfo.map[currExtName];
+                    let extId = currPredPHPVerInfo.map[currExtName];
                     if (!enabler.isEnabled(extId)) {
                         extIdsToInstall.push(extId);
                         loggerInfo.currentlyInstalled.push(currExtName);
@@ -395,26 +377,21 @@ var installer = (function defineInstaller() {
                 }
             });
 
-            // ALWAYS INSTALL
-            for (let extName in predefInfo.alwaysInstall) {
-                if (!predefInfo.alwaysInstall.hasOwnProperty(extName)) {
-                    continue;
-                }
-
-                let extId = predefInfo.alwaysInstall[extName];
+            Object.keys(currPredPHPVerInfo.alwaysInstall).forEach(function nn(extName) {
+                var extId = currPredPHPVerInfo.alwaysInstall[extName];
                 if (!enabler.isEnabled(extId)) {
                     extIdsToInstall.push(extId);
                     loggerInfo.alwaysInstalled.push(extName);
                 } else {
                     loggerInfo.alreadyInstalled.push(extName);
                 }
-            }
+            });
 
             extIdsToInstall.forEach(function (id) {
                 enabler.enableExt(id);
             });
 
-            console.log("%c \\-- Info for PHP " + cPanelPHPVerInfo.version + " ", "background: #444853; border-radius: 2px; line-height: 18px; color: #b6d580;");
+            console.log("%c \\-- Info for PHP " + currcPanelPHPVerInfo.version + " ", "background: #444853; border-radius: 2px; line-height: 18px; color: #b6d580;");
             if (loggerInfo.alwaysInstalled.length > 0) {
                 logger.logExtensions(loggerInfo.alwaysInstalled, "Extensions installed to work normally");
             }
