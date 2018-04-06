@@ -123,7 +123,7 @@ var installer = (function defineInstaller() {
             },
             notAvailableOnVPS: [
                 "apcu", "apm", "ares", "big_int", "bitset", "brotli", "bz2_filter", "dbase", "dbx",
-                "doublemetaphone", "eio", "geoip", "gmagick", "gnupg", "haru", "hidef", "htscanner",
+                "doublemetaphone", "eio", "gender", "geoip", "gmagick", "gnupg", "haru", "hidef", "htscanner",
                 "http", "igbinary", "inotify", "interbase", "ioncube_loader_4", "jsmin", "libevent",
                 "libsodium", "lzf", "mailparse", "memcache", "memcached", "mongo", "mongodb", "msgpack",
                 "mssql", "mysql", "mysqli", "ncurses", "nd_mysql", "nd_mysqli", "nd_pdo_mysql", "oauth",
@@ -131,13 +131,130 @@ var installer = (function defineInstaller() {
                 "pdo_sqlite", "phalcon3", "propro", "quickhash", "radius", "raphf", "rar", "redis", "rsync",
                 "solr", "spl_types", "ssh2", "stats", "stem", "stomp", "sybase_ct", "sysvmsg", "sysvsem",
                 "sysvshm", "timezonedb", "trader", "translit", "uploadprogress", "uri_template", "uuid",
-                "weakref", "Xcache_3", "xdebug", "xrange", "yaf", "yaml", "yaz", "zend_guard_loader", "zmq"
+                "weakref", "xcache_3", "xdebug", "xrange", "yaf", "yaml", "yaz", "zend_guard_loader", "zmq"
+            ]
+        };
+
+        var php56 = {
+            alwaysInstall: {
+                "bz2": "switch_ea-php56-php-bz2",
+                "calendar": "switch_ea-php56-php-calendar",
+                "curl": "switch_ea-php56-php-curl",
+                "exif": "switch_ea-php56-php-exif",
+                "ftp": "switch_ea-php56-php-ftp",
+                "gettext": "switch_ea-php56-php-gettext",
+                "gmp": "switch_ea-php56-php-gmp",
+                "iconv": "switch_ea-php56-php-iconv",
+                "xml": "switch_ea-php56-php-xml"
+            },
+            map: {
+                "bcmath": "switch_ea-php56-php-bcmath",
+                "dba": "switch_ea-php56-php-dba",
+                "enchant": "switch_ea-php56-php-enchant",
+                "fileinfo": "switch_ea-php56-php-fileinfo",
+                "gd": "switch_ea-php56-php-gd",
+                "imap": "switch_ea-php56-php-imap",
+                "intl": "switch_ea-php56-php-intl",
+                "ldap": "switch_ea-php56-php-ldap",
+                "mbstring": "switch_ea-php56-php-mbstring",
+                "mcrypt": "switch_ea-php56-php-mcrypt",
+                "mssql": "switch_ea-php56-php-mssql",
+                "mysqlnd": "switch_ea-php56-php-mysqlnd",
+                "odbc": "switch_ea-php56-php-odbc",
+                "opcache": "switch_ea-php56-php-opcache",
+                "pdo": "switch_ea-php56-php-pdo",
+                "pgsql": "switch_ea-php56-php-pgsql",
+                "phalcon": "switch_ea-php56-php-phalcon",
+                "posix": "switch_ea-php56-php-posix",
+                "pspell": "switch_ea-php56-php-pspell",
+                "snmp": "switch_ea-php56-php-snmp",
+                "soap": "switch_ea-php56-php-soap",
+                "sockets": "switch_ea-php56-php-sockets",
+                "sourceguardian": "switch_ea-php56-php-sourceguardian",
+                "suhosin": "switch_ea-php56-php-suhosin",
+                "tidy": "switch_ea-php56-php-tidy",
+                "xmlrpc": "switch_ea-php56-php-xmlrpc",
+                "zip": "switch_ea-php56-php-zip"
+            },
+            installedByDefault: ["dom", "json", "phar", "wddx", "xmlreader", "xmlwriter", "xsl"],
+            additionalInfo: {
+                "ffmpeg": "FFMPEG Needs Installation for PHP 5.6",
+                "imagick": "IMAGICK Needs Installation for PHP 5.6 - yum install ImageMagick-devel | WHM -> Module Installers -> PHP Pecl [Manage] -> imagick",
+                "ioncube_loader": "IONCUBE NEEDED for PHP 5.6 - WHM -> Tweak Settings -> PHP -> cPanel PHP loader -> ioncube",
+                "recode": "recode extension enabled, fix dependencies manually if it's absolutely necessary"
+            },
+            notAvailableOnVPS: [
+                "apcu", "apm", "ares", "big_int", "bitset", "brotli", "bz2_filter", "dbx",
+                "doublemetaphone", "eio", "gender", "geoip", "gmagick", "gnupg", "haru", "htscanner",
+                "http", "igbinary", "inotify", "interbase", "ioncube_loader_4", "jsmin", "libevent",
+                "libsodium", "lzf", "mailparse", "memcache", "memcached", "mongo", "mongodb", "msgpack",
+                "mysql", "mysqli", "ncurses", "nd_mysql", "nd_mysqli", "nd_pdo_mysql", "oauth", "oci8",
+                "pdf", "pdo_dblib", "pdo_firebird", "pdo_mysql", "pdo_oci", "pdo_odbc", "pdo_pgsql", "pdo_sqlite",
+                "phalcon3", "propro", "quickhash", "radius", "raphf", "rar", "redis", "rsync", "solr", "spl_types",
+                "ssh2", "stats", "stem", "stomp", "sybase_ct", "sysvmsg", "sysvsem", "sysvshm", "timezonedb",
+                "trader", "translit", "uploadprogress", "uri_template", "uuid", "weakref", "xcache_3", "xdebug",
+                "xrange", "yaml", "yaz", "zend_guard_loader", "zmq"
+            ]
+        };
+
+        var php70 = {
+            alwaysInstall: {
+                "bz2": "switch_ea-php70-php-bz2",
+                "calendar": "switch_ea-php70-php-calendar",
+                "curl": "switch_ea-php70-php-curl",
+                "exif": "switch_ea-php70-php-exif",
+                "ftp": "switch_ea-php70-php-ftp",
+                "gettext": "switch_ea-php70-php-gettext",
+                "gmp": "switch_ea-php70-php-gmp",
+                "iconv": "switch_ea-php70-php-iconv",
+                "xml": "switch_ea-php70-php-xml"
+            },
+            map: {
+                "bcmath": "switch_ea-php70-php-bcmath",
+                "dba": "switch_ea-php70-php-dba",
+                "enchant": "switch_ea-php70-php-enchant",
+                "fileinfo": "switch_ea-php70-php-fileinfo",
+                "gd": "switch_ea-php70-php-gd",
+                "imap": "switch_ea-php70-php-imap",
+                "intl": "switch_ea-php70-php-intl",
+                "ldap": "switch_ea-php70-php-ldap",
+                "mbstring": "switch_ea-php70-php-mbstring",
+                "mcrypt": "switch_ea-php70-php-mcrypt",
+                "mysqlnd": "switch_ea-php70-php-mysqlnd",
+                "odbc": "switch_ea-php70-php-odbc",
+                "opcache": "witch_ea-php70-php-opcache",
+                "pdo": "switch_ea-php70-php-pdo",
+                "pgsql": "switch_ea-php70-php-pgsql",
+                "posix": "switch_ea-php70-php-posix",
+                "pspell": "switch_ea-php70-php-pspell",
+                "snmp": "switch_ea-php70-php-snmp",
+                "soap": "switch_ea-php70-php-soap",
+                "sockets": "switch_ea-php70-php-sockets",
+                "sourceguardian": "switch_ea-php70-php-sourceguardian",
+                "tidy": "switch_ea-php70-php-tidy",
+                "xmlrpc": "switch_ea-php70-php-xmlrpc",
+                "zip": "switch_ea-php70-php-zip",
+                "phalcon3": "switch_ea-php70-php-phalcon"
+            },
+            installedByDefault: ["dom", "phar", "xsl", "json", "wddx", "xmlreader", "xmlwriter"],
+            additionalInfo: {
+                "imagick": "IMAGICK Needs Installation for PHP 7.0 - yum install ImageMagick-devel | WHM -> Module Installers -> PHP Pecl [Manage] -> imagick",
+                "ioncube_loader": "IONCUBE NEEDED for PHP 7.0 - WHM -> Tweak Settings -> PHP -> cPanel PHP loader -> ioncube",
+            },
+            notAvailableOnVPS: [
+                "apcu", "bitset", "brotli", "dbase", "eio", "gender", "geoip", "gmagick", "gnupg", "htscanner", "http", "igbinary",
+                "inotify", "interbase", "libsodium", "lzf", "mailparse", "memcached", "mongodb", "mysqli", "nd_mysqli", "nd_pdo_mysql",
+                "oauth", "oci8", "pdf", "pdo_dblib", "pdo_firebird", "pdo_mysql", "pdo_oci", "pdo_odbc", "pdo_pgsql", "pdo_sqlite",
+                "pdo_sqlsrv", "propro", "raphf", "rar", "redis", "solr", "sqlsrv", "ssh2", "stats", "suhosin", "sysvmsg",
+                "sysvsem", "sysvshm", "timezonedb", "trader", "uploadprogress", "uuid", "vips", "yaf", "xdebug", "yaml", "yaz", "zmq"
             ]
         };
 
         return {
             php54: php54,
-            php55: php55
+            php55: php55,
+            php56: php56,
+            php70: php70
         }
     }());
 
@@ -159,7 +276,7 @@ var installer = (function defineInstaller() {
         function logWarnings(ver, warnings) {
             console.log(`%c   Warnings for ${ver.substr(0, 3).toUpperCase()} ${ver.slice(-2)}    `, style + "color: red;");
             warnings.forEach(function (warning) {
-                console.log(`%c ${warning}`, style + "color: red;")
+                console.log(`%c ${warning} `, style + "color: white;")
             });
         }
 
@@ -168,7 +285,8 @@ var installer = (function defineInstaller() {
         }
 
         function help() {
-            {let $_$ = ` __        __   _       _   _           _     _____              
+            {
+                let $_$ = ` __        __   _       _   _           _     _____              
  \\ \\      / /__| |__   | | | | ___  ___| |_  |  ___|_ _  ___ ___ 
   \\ \\ /\\ / / _ \\ '_ \\  | |_| |/ _ \\/ __| __| | |_ / _\` |/ __/ _ \\
    \\ V  V /  __/ |_) | |  _  | (_) \\__ \\ |_  |  _| (_| | (_|  __/
@@ -247,6 +365,12 @@ var installer = (function defineInstaller() {
                 case 55:
                     predefInfo = versInfo.php55;
                     break;
+                case 56:
+                    predefInfo = versInfo.php56;
+                    break;
+                case 70:
+                    predefInfo = versInfo.php70;
+                    break;
             }
 
             // INSTALL CPAN EXTS
@@ -317,7 +441,9 @@ var installer = (function defineInstaller() {
         })
     }
 
-    (function displayHelp() { logger.help() }());
+    (function displayHelp() {
+        logger.help()
+    }());
 
     return {
         install: install
