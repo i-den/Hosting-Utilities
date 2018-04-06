@@ -292,7 +292,7 @@ var installer = (function defineInstaller() {
                 "ioncube_loader": "IONCUBE NEEDED for PHP 7.0 - WHM -> Tweak Settings -> PHP -> cPanel PHP loader -> ioncube"
             },
             notAvailableOnVPS: [
-                "libxml", "brotli", "dbase", "eio", "gender", "geoip", "gmagick", "gnupg", "htscanner", "http",
+                "apcu", "libxml", "brotli", "dbase", "eio", "gender", "geoip", "gmagick", "gnupg", "htscanner", "http",
                 "igbinary", "inotify", "interbase", "libsodium", "lzf", "mailparse", "memcached", "mongodb",
                 "mysqli", "nd_mysqli", "nd_pdo_mysql", "oauth", "oci8", "pdo_dblib", "pdo_firebird", "pdo_mysql",
                 "pdo_oci", "pdo_odbc", "pdo_pgsql", "pdo_sqlite", "pdo_sqlsrv", "propro", "raphf", "rar", "redis",
@@ -406,6 +406,9 @@ var installer = (function defineInstaller() {
                     break;
                 case 70:
                     currPredPHPVerInfo = _predefinedPHPVersInfo.php70;
+                    break;
+                case 71:
+                    currPredPHPVerInfo = _predefinedPHPVersInfo.php71;
                     break;
             }
 
