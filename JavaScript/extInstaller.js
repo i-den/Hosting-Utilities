@@ -390,7 +390,7 @@ var installer = (function defineInstaller() {
                 console.log($_$);
             }
 
-            console.log("%c \\-- Copy the JSON from cPanel -> Select PHP Version, then ", style + "color: #8daed6;");
+            console.log("%c \\-- Copy the JSON from, check PHP versions that will be used then ", style + "color: #8daed6;");
             console.log("  |-- installer.install(`JSON_GOES_HERE`) - %c The (` `) ARE MANDATORY", "color: green;");
         }
 
@@ -545,7 +545,7 @@ var installer = (function defineInstaller() {
         _logger.help()
     }());
 
-    return {
+    return Object.freeze({
         install: install
-    }
+    })
 }());
