@@ -53,7 +53,7 @@ var installer = (function defineInstaller() {
                 "xmlrpc": "switch_ea-php54-php-xmlrpc",
                 "zip": "switch_ea-php54-php-zip"
             },
-            installedByDefault: ["dom", "phar", "wddx", "xmlreader", "xmlwriter", "xsl", "json"],
+            installedByDefault: ["dom", "json", "phar", "wddx", "xmlreader", "xmlwriter", "xsl"],
             additionalInfo: {
                 "ffmpeg": "FFMPEG Needs Installation for PHP 5.4",
                 "imagick": "IMAGICK Needs Installation for PHP 5.4 - yum install ImageMagick-devel | WHM -> Module Installers -> PHP Pecl [Manage] -> imagick",
@@ -236,7 +236,7 @@ var installer = (function defineInstaller() {
                 "zip": "switch_ea-php70-php-zip",
                 "phalcon3": "switch_ea-php70-php-phalcon"
             },
-            installedByDefault: ["dom", "phar", "xsl", "json", "wddx", "xmlreader", "xmlwriter"],
+            installedByDefault: ["dom", "json", "phar", "wddx", "xmlreader", "xmlwriter", "xsl"],
             additionalInfo: {
                 "imagick": "IMAGICK Needs Installation for PHP 7.0 - yum install ImageMagick-devel | WHM -> Module Installers -> PHP Pecl [Manage] -> imagick",
                 "ioncube_loader": "IONCUBE NEEDED for PHP 7.0 - WHM -> Tweak Settings -> PHP -> cPanel PHP loader -> ioncube",
@@ -286,7 +286,7 @@ var installer = (function defineInstaller() {
                 "xmlrpc": "switch_ea-php71-php-xmlrpc",
                 "zip": "switch_ea-php71-php-zip"
             },
-            installedByDefault: ["dom", "phar", "xsl", "json", "wddx", "xmlreader", "xmlwriter"],
+            installedByDefault: ["dom", "json", "phar", "wddx", "xmlreader", "xmlwriter", "xsl"],
             additionalInfo: {
                 "imagick": "IMAGICK Needs Installation for PHP 7.1 - yum install ImageMagick-devel | WHM -> Module Installers -> PHP Pecl [Manage] -> imagick",
                 "ioncube_loader": "IONCUBE NEEDED for PHP 7.0 - WHM -> Tweak Settings -> PHP -> cPanel PHP loader -> ioncube"
@@ -335,7 +335,7 @@ var installer = (function defineInstaller() {
                 "xmlrpc": "switch_ea-php72-php-xmlrpc",
                 "zip": "switch_ea-php72-php-zip"
             },
-            installedByDefault: ["dom", "phar", "xsl", "json", "wddx", "xmlreader", "xmlwriter"],
+            installedByDefault: ["dom", "json", "phar", "wddx", "xmlreader", "xmlwriter", "xsl"],
             additionalInfo: {
                 "imagick": "IMAGICK Needs Installation for PHP 7.2 - yum install ImageMagick-devel | WHM -> Module Installers -> PHP Pecl [Manage] -> imagick",
                 "ioncube_loader": "IONCUBE NEEDED for PHP 7.0 - WHM -> Tweak Settings -> PHP -> cPanel PHP loader -> ioncube",
@@ -420,7 +420,7 @@ var installer = (function defineInstaller() {
 
     function install(phpExtJSON) {
         if (document.getElementById("pageSize_select").selectedOptions[0].text !== "All") {
-            _logger.logErr("SELECT ALL FROM Page Size");
+            _logger.logErr("!! Select ALL from Page Size to View Everything !!");
             return;
         }
 
@@ -434,6 +434,7 @@ var installer = (function defineInstaller() {
                 php72: []
             };
 
+        // Foreach JSON Version Objects
         cPanPHPVersInfo.forEach(function (currcPanelPHPVerInfo) {
             var currPredPHPVerInfo,
                 extIdsToInstall = [],
@@ -466,19 +467,19 @@ var installer = (function defineInstaller() {
                     break;
             }
 
-            // INSTALL EXTENSIONS FROM CPANEL
+            // Foreach PHP Extensions for installation
             currcPanelPHPVerInfo.extensions.forEach(function (currExtName) {
                 if (currPredPHPVerInfo.notAvailableOnVPS.includes(currExtName)) {
-                    // NOT AVAIL ON VPS INFO
+                    // Extensions That Are Not Available on a VPS
                     loggerInfo.notAvailableOnVPS.push(currExtName);
                 } else if (currPredPHPVerInfo.installedByDefault.includes(currExtName)) {
-                    // ALREADY INSTALL BY DEF
+                    // Extensions That Are Already Installed or Scheduled for Installation
                     loggerInfo.alreadyInstalled.push(currExtName);
                 } else if (Object.keys(currPredPHPVerInfo.additionalInfo).includes(currExtName)) {
-                    // SPECIAL CASES - ffmpeg, ImageMagick, etc
+                    // Special Cases like ffmpeg, ImageMagick etc...
                     warnings["php" + currcPanelPHPVerInfo.version].push(currPredPHPVerInfo.additionalInfo[currExtName]);
                 } else if (Object.keys(currPredPHPVerInfo.map).includes(currExtName)){
-                    // EXT IS IN MAP
+                    // Extensions That Are Pre-Defined and Should Be Installed
                     let extId = currPredPHPVerInfo.map[currExtName];
                     if (!_enabler.isEnabled(extId)) {
                         extIdsToInstall.push(extId);
@@ -487,11 +488,12 @@ var installer = (function defineInstaller() {
                         loggerInfo.alreadyInstalled.push(currExtName);
                     }
                 } else {
-                    // EXT IS NOT MAPPED
+                    // Extensions That Are Not Taken Into Consideration by the Script
                     loggerInfo.notRecognized.push(currExtName);
                 }
             });
 
+            // Foreach PHP Extensions That Are Necessary
             Object.keys(currPredPHPVerInfo.alwaysInstall).forEach(function (extName) {
                 var extId = currPredPHPVerInfo.alwaysInstall[extName];
                 if (!_enabler.isEnabled(extId)) {
@@ -502,6 +504,7 @@ var installer = (function defineInstaller() {
                 }
             });
 
+            // Foreach Enable Extensions for Installation
             extIdsToInstall.forEach(function (id) {
                 _enabler.enableExt(id);
             });
@@ -516,7 +519,7 @@ var installer = (function defineInstaller() {
             }
 
             if (loggerInfo.currentlyInstalled.length > 0) {
-                _logger.logExtensions(loggerInfo.currentlyInstalled, "Extensions Turned On for Installation")
+                _logger.logExtensions(loggerInfo.currentlyInstalled, "Extensions Used in cPanel for Installation")
             }
 
             if (loggerInfo.notAvailableOnVPS.length > 0) {
@@ -530,6 +533,7 @@ var installer = (function defineInstaller() {
             console.log("");
         });
 
+        // Foreach Display Warnings for Each Version
         Object.keys(warnings).forEach(function (currPhpWarn) {
             if (warnings[currPhpWarn].length > 0) {
                 _logger.logWarnings(currPhpWarn, warnings[currPhpWarn]);
