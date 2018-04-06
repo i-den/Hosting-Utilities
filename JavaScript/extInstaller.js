@@ -299,6 +299,56 @@ var installer = (function defineInstaller() {
                 "solr", "sourceguardian", "sqlsrv", "ssh2", "stats", "suhosin", "sysvmsg", "sysvsem", "sysvshm",
                 "timezonedb", "trader", "uploadprogress", "uuid", "vips", "xdebug", "yaf", "yaml", "zmq"
             ]
+        },
+        php72: {
+            alwaysInstall: {
+                "bz2": "switch_ea-php72-php-bz2",
+                "calendar": "switch_ea-php72-php-calendar",
+                "curl": "switch_ea-php72-php-curl",
+                "exif": "switch_ea-php72-php-exif",
+                "ftp": "switch_ea-php72-php-ftp",
+                "gettext": "switch_ea-php72-php-gettext",
+                "gmp": "switch_ea-php72-php-gmp",
+                "iconv": "switch_ea-php72-php-iconv"
+            },
+            map: {
+                "bcmath": "switch_ea-php72-php-bcmath",
+                "dba": "switch_ea-php72-php-dba",
+                "enchant": "switch_ea-php72-php-enchant",
+                "fileinfo": "switch_ea-php72-php-fileinfo",
+                "gd": "switch_ea-php72-php-gd",
+                "imap": "switch_ea-php72-php-imap",
+                "intl": "switch_ea-php72-php-intl",
+                "ldap": "switch_ea-php72-php-ldap",
+                "mbstring": "switch_ea-php72-php-mbstring",
+                "mysqlnd": "switch_ea-php72-php-mysqlnd",
+                "odbc": "switch_ea-php72-php-odbc",
+                "opcache": "switch_ea-php72-php-opcache",
+                "pdo": "switch_ea-php72-php-pdo",
+                "pgsql": "switch_ea-php72-php-pgsql",
+                "posix": "switch_ea-php72-php-posix",
+                "pspell": "switch_ea-php72-php-pspell",
+                "snmp": "switch_ea-php72-php-snmp",
+                "soap": "switch_ea-php72-php-soap",
+                "sockets": "switch_ea-php72-php-sockets",
+                "tidy": "switch_ea-php72-php-tidy",
+                "xmlrpc": "switch_ea-php72-php-xmlrpc",
+                "zip": "switch_ea-php72-php-zip"
+            },
+            installedByDefault: ["dom", "phar", "xsl", "json", "wddx", "xmlreader", "xmlwriter"],
+            additionalInfo: {
+                "imagick": "IMAGICK Needs Installation for PHP 7.2 - yum install ImageMagick-devel | WHM -> Module Installers -> PHP Pecl [Manage] -> imagick",
+                "ioncube_loader": "IONCUBE NEEDED for PHP 7.0 - WHM -> Tweak Settings -> PHP -> cPanel PHP loader -> ioncube",
+                "phalcon3": "phalcon isn't available on PHP 7.2"
+            },
+            notAvailableOnVPS: [
+                "apcu", "brotli", "dbase", "eio", "gender", "geoip", "gmagick", "gnupg", "http",
+                "igbinary", "inotify", "interbase", "lzf", "mailparse", "memcached", "mongodb",
+                "mysqli", "nd_mysqli", "nd_pdo_mysql", "oauth", "oci8", "pdo_dblib", "pdo_firebird",
+                "pdo_mysql", "pdo_oci", "pdo_odbc", "pdo_pgsql", "pdo_sqlite", "pdo_sqlsrv", "propro",
+                "raphf", "redis", "sqlsrv", "ssh2", "stats", "sysvmsg", "sysvsem", "sysvshm", "timezonedb",
+                "trader", "uploadprogress", "uuid", "vips", "xdebug", "yaf", "yaml", "zmq"
+            ]
         }
     };
 
@@ -391,7 +441,8 @@ var installer = (function defineInstaller() {
                     alwaysInstalled: [],
                     alreadyInstalled: [],
                     currentlyInstalled: [],
-                    notAvailableOnVPS: []
+                    notAvailableOnVPS: [],
+                    notRecognized: []
                 };
 
             switch (currcPanelPHPVerInfo.version) {
@@ -410,6 +461,9 @@ var installer = (function defineInstaller() {
                 case 71:
                     currPredPHPVerInfo = _predefinedPHPVersInfo.php71;
                     break;
+                case 72:
+                    currPredPHPVerInfo = _predefinedPHPVersInfo.php72;
+                    break;
             }
 
             // INSTALL EXTENSIONS FROM CPANEL
@@ -423,7 +477,8 @@ var installer = (function defineInstaller() {
                 } else if (Object.keys(currPredPHPVerInfo.additionalInfo).includes(currExtName)) {
                     // SPECIAL CASES - ffmpeg, ImageMagick, etc
                     warnings["php" + currcPanelPHPVerInfo.version].push(currPredPHPVerInfo.additionalInfo[currExtName]);
-                } else {
+                } else if (Object.keys(currPredPHPVerInfo.map).includes(currExtName)){
+                    // EXT IS IN MAP
                     let extId = currPredPHPVerInfo.map[currExtName];
                     if (!_enabler.isEnabled(extId)) {
                         extIdsToInstall.push(extId);
@@ -431,6 +486,9 @@ var installer = (function defineInstaller() {
                     } else {
                         loggerInfo.alreadyInstalled.push(currExtName);
                     }
+                } else {
+                    // EXT IS NOT MAPPED
+                    loggerInfo.notRecognized.push(currExtName);
                 }
             });
 
@@ -450,19 +508,23 @@ var installer = (function defineInstaller() {
 
             console.log("%c \\-- Info for PHP " + currcPanelPHPVerInfo.version + " ", "background: #444853; border-radius: 2px; line-height: 18px; color: #b6d580;");
             if (loggerInfo.alwaysInstalled.length > 0) {
-                _logger.logExtensions(loggerInfo.alwaysInstalled, "Extensions installed to work normally");
+                _logger.logExtensions(loggerInfo.alwaysInstalled, "Necessary Shared Hosting Extensions Scheduled for Installation ");
             }
 
             if (loggerInfo.alreadyInstalled.length > 0) {
-                _logger.logExtensions(loggerInfo.alreadyInstalled, "Extensions that were already installed on the VPS");
+                _logger.logExtensions(loggerInfo.alreadyInstalled, "Extensions Already Scheduled for Installation or Installed");
             }
 
             if (loggerInfo.currentlyInstalled.length > 0) {
-                _logger.logExtensions(loggerInfo.currentlyInstalled, "Extensions enabled for installation from cPanel")
+                _logger.logExtensions(loggerInfo.currentlyInstalled, "Extensions Turned On for Installation")
             }
 
             if (loggerInfo.notAvailableOnVPS.length > 0) {
                 _logger.logExtensions(loggerInfo.notAvailableOnVPS, "!! NOT AVAILABLE ON VPS !!");
+            }
+
+            if (loggerInfo.notRecognized.length > 0) {
+                _logger.logExtensions(loggerInfo.notRecognized, "!! NOT RECOGNIZED BY SCRIPT !!");
             }
 
             console.log("");
