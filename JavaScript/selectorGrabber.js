@@ -5,7 +5,7 @@
  *       \ V  V /  __/ |_) | |  _  | (_) \__ \ |_  |  _| (_| | (_|  __/
  *        \_/\_/ \___|_.__/  |_| |_|\___/|___/\__| |_|  \__,_|\___\___|
  *
- *                       PHP Extension Grabber v1.2
+ *                       PHP Extension Grabber v1.3
  */
 
 var grabber = (function defineGrabber() {
@@ -69,15 +69,17 @@ var grabber = (function defineGrabber() {
         }
 
         function help() {
-            var $_$ = ` __        __   _       _   _           _     _____              
+            {let $_$ = ` __        __   _       _   _           _     _____              
  \\ \\      / /__| |__   | | | | ___  ___| |_  |  ___|_ _  ___ ___ 
   \\ \\ /\\ / / _ \\ '_ \\  | |_| |/ _ \\/ __| __| | |_ / _\` |/ __/ _ \\
    \\ V  V /  __/ |_) | |  _  | (_) \\__ \\ |_  |  _| (_| | (_|  __/
     \\_/\\_/ \\___|_.__/  |_| |_|\\___/|___/\\__| |_|  \\__,_|\\___\\___|
                                                                  
-                    PHP Extension Grabber v1.1`;
+                    PHP Extension Grabber v1.3`;
 
-            console.log($_$);
+                console.log($_$);
+            }
+
             console.log("%c \\-- Select PHP Version from the Top Left dropdown, then ", style + "color: #8daed6;");
             console.log("  |-- grabber.add54() - %c All Extensions for PHP 5.4 are added to a JSON", "color: green;");
             console.log("  |-- grabber.add55() --  grabber.add56() --  grabber.add70() --  grabber.add71() --  grabber.add72()");
@@ -251,6 +253,30 @@ var grabber = (function defineGrabber() {
         _rmVer(72);
     }
 
+    function addCustom(ver) {
+        if (!/^[\d]{2}$/.test(ver)) {
+            _logger.logErr("Invalid Version, Enter a Number Like: 71, 72, 73, 74")
+        } else if (!_verifyCurrVersionDOM(ver)) {
+            _logger.logErr("Wrong Version Selected");
+        }  else if (_finder.findVersionAmongSaved(ver)) {
+            _logger.logErr("Version" + ver + " already saved");
+        } else {
+            allPHPExtensions.push({
+                version: ver,
+                extensions: _getVersionExtensions()
+            });
+            _logger.logInfo("Saved Extensions for " + ver);
+        }
+    }
+
+    function rmCustom(ver) {
+        if (!/^[\d]{2}$/.test(ver)) {
+            _logger.logErr("Invalid Version, Enter a Number Like: 71, 72, 73, 74")
+        }
+
+        _rmVer(ver);
+    }
+
     function clear() {
         if (!_verifyExtensionsNotEmpty()) {
             _logger.logErr("THERE ARE NO EXTENSIONS TO REMOVE");
@@ -283,6 +309,8 @@ var grabber = (function defineGrabber() {
         rm71: rm71,
         add72: add72,
         rm72: rm72,
+        addCustom: addCustom,
+        rmCustom: rmCustom,
         v: reportStoredVersions,
         getJSON: getJSON,
         clear: clear
