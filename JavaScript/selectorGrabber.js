@@ -145,9 +145,16 @@ var grabber = (function defineGrabber() {
             })
         }
 
-        function findAvailablePhpVersionsOnThisCpanel(){
+        function findAvailablePhpVersionsOnThisCpanel(limitTo54AndAbove = true){
             Array.from(document.getElementsByTagName("option")).map(function (currentValue) {
-                availablePhpVersions.push(String(currentValue.value));
+                if(limitTo54AndAbove){
+                    if(Number(currentValue.value) >= 5.4){
+                        availablePhpVersions.push(String(currentValue.value))
+                    }
+                }
+                else{
+                    availablePhpVersions.push(String(currentValue.value));
+                }
             });
         }
 
