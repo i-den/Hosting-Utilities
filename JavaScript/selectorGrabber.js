@@ -1,18 +1,10 @@
-/**
- *     __        __   _       _   _           _     _____
- *     \ \      / /__| |__   | | | | ___  ___| |_  |  ___|_ _  ___ ___
- *      \ \ /\ / / _ \ '_ \  | |_| |/ _ \/ __| __| | |_ / _` |/ __/ _ \
- *       \ V  V /  __/ |_) | |  _  | (_) \__ \ |_  |  _| (_| | (_|  __/
- *        \_/\_/ \___|_.__/  |_| |_|\___/|___/\__| |_|  \__,_|\___\___|
- *
- *                       PHP Extension Grabber v1.3
- */
-
 var grabber = (function defineGrabber() {
     "use strict";
     var allPHPExtensions = [],
+        availablePhpVersions = [],
         _logger,
         _finder;
+
 
     function _getVersionExtensions() {
         var phpExtNames = Array.from(document.querySelectorAll("td:nth-child(odd):not(:empty)")),
@@ -34,6 +26,41 @@ var grabber = (function defineGrabber() {
         });
 
         return chkdExtns;
+    }
+
+    function _getVersionExtensionsFromObjectWithExts(singleObject) {
+        let activeExtentionsForSingleVersion = [];
+        singleObject.data.map( object => {
+            if(object.status === 1){
+                activeExtentionsForSingleVersion.push(object.title);
+            }
+        });
+        return activeExtentionsForSingleVersion;
+    }
+
+    function _sendPostToGetExtentionsForSpecificVer(ver) {
+        return new Promise(function (resolve, reject) {
+            let request = new XMLHttpRequest(),
+                request_data = {"version": ver, "action": "extlist"};
+
+            request.open("POST", uri); // uri defined in template
+            request.onreadystatechange = function () {
+                if (request.readyState === 4 && request.status === 200) {
+                    _logger.logInfo(`PhP extensions for ${ver} acquired`);
+                    return resolve(JSON.parse(request.responseText))
+                }
+            };
+            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.send(encodeFormData(request_data));
+        });
+    }
+
+    function _addThisVersion(version,objectWithExtentions) {
+        allPHPExtensions.push({
+            version: Number(version.split(".").join("")),
+            extensions: _getVersionExtensionsFromObjectWithExts(objectWithExtentions)
+        });
+        _logger.logInfo(`Saved Extensions for ${version}`);
     }
 
     function _verifyCurrVersionDOM(ver) {
@@ -75,11 +102,10 @@ var grabber = (function defineGrabber() {
    \\ V  V /  __/ |_) | |  _  | (_) \\__ \\ |_  |  _| (_| | (_|  __/
     \\_/\\_/ \\___|_.__/  |_| |_|\\___/|___/\\__| |_|  \\__,_|\\___\\___|
                                                                  
-                    PHP Extension Grabber v1.3`;
+                    PHP Extension Grabber v1.4`;
 
-                console.log($_$);
+            console.log($_$);
             }
-
             console.log("%c \\-- Select PHP Version from the Top Left dropdown, then ", style + "color: #8daed6;");
             console.log("  |-- grabber.add54() - %c All Extensions for PHP 5.4 are added to a JSON", "color: green;");
             console.log("  |-- grabber.add55() --  grabber.add56() --  grabber.add70() --  grabber.add71() --  grabber.add72()");
@@ -119,9 +145,24 @@ var grabber = (function defineGrabber() {
             })
         }
 
+        function findAvailablePhpVersionsOnThisCpanel(){
+            Array.from(document.getElementsByTagName("option")).map(function (currentValue) {
+                availablePhpVersions.push(String(currentValue.value));
+            });
+        }
+
+        function processReturnedJson(arrayOfObjects) {
+            arrayOfObjects.map( (snglObject, index) => {
+                _addThisVersion(availablePhpVersions[index],snglObject);
+            });
+            getJSON();
+        }
+
         return Object.freeze({
             findVersionAmongSaved: findVersionAmongSaved,
-            findVersIndex: findVersIndex
+            findVersIndex: findVersIndex,
+            findAvailablePhpVersionsOnThisCpanel: findAvailablePhpVersionsOnThisCpanel,
+            processReturnedJson: processReturnedJson
         })
     }());
 
@@ -254,28 +295,28 @@ var grabber = (function defineGrabber() {
     }
 
     function addCustom(ver) {
-        if (!/^[\d]{2}$/.test(ver)) {
-            _logger.logErr("Invalid Version, Enter a Number Like: 71, 72, 73, 74")
-        } else if (!_verifyCurrVersionDOM(ver)) {
-            _logger.logErr("Wrong Version Selected");
-        }  else if (_finder.findVersionAmongSaved(ver)) {
-            _logger.logErr("Version" + ver + " already saved");
-        } else {
-            allPHPExtensions.push({
-                version: ver,
-                extensions: _getVersionExtensions()
-            });
-            _logger.logInfo("Saved Extensions for " + ver);
-        }
-    }
+                if (!/^[\d]{2}$/.test(ver)) {
+                        _logger.logErr("Invalid Version, Enter a Number Like: 71, 72, 73, 74")
+                    } else if (!_verifyCurrVersionDOM(ver)) {
+                        _logger.logErr("Wrong Version Selected");
+                    }  else if (_finder.findVersionAmongSaved(ver)) {
+                        _logger.logErr("Version" + ver + " already saved");
+                    } else {
+                        allPHPExtensions.push({
+                                version: ver,
+                                extensions: _getVersionExtensions()
+                        });
+                        _logger.logInfo("Saved Extensions for " + ver);
+                    }
+            }
 
     function rmCustom(ver) {
-        if (!/^[\d]{2}$/.test(ver)) {
-            _logger.logErr("Invalid Version, Enter a Number Like: 71, 72, 73, 74")
-        }
+                if (!/^[\d]{2}$/.test(ver)) {
+                        _logger.logErr("Invalid Version, Enter a Number Like: 71, 72, 73, 74")
+                    }
 
-        _rmVer(ver);
-    }
+                    _rmVer(ver);
+            }
 
     function clear() {
         if (!_verifyExtensionsNotEmpty()) {
@@ -294,6 +335,24 @@ var grabber = (function defineGrabber() {
         }
     }
 
+    function addAll() {
+        _finder.findAvailablePhpVersionsOnThisCpanel();
+        console.warn(`php vers: ${availablePhpVersions}`);
+        if(!availablePhpVersions || availablePhpVersions.length === 0){
+            _logger.logErr("Something went wrong, contact this script developers.");
+        }
+
+        var fireRequestForEachVerExtns = availablePhpVersions.map( singleVersion =>{
+           return _sendPostToGetExtentionsForSpecificVer(singleVersion);
+        });
+
+        Promise.all(fireRequestForEachVerExtns).then( results =>{
+           _logger.logInfo(`All requests finished`);
+           _finder.processReturnedJson(results);
+        });
+
+    }
+
     (function displayHelp() { _logger.help() }());
 
     return Object.freeze({
@@ -309,10 +368,11 @@ var grabber = (function defineGrabber() {
         rm71: rm71,
         add72: add72,
         rm72: rm72,
-        addCustom: addCustom,
-        rmCustom: rmCustom,
+        addCustom:addCustom,
+        rmCustom:rmCustom,
         v: reportStoredVersions,
         getJSON: getJSON,
-        clear: clear
+        clear: clear,
+        addAll: addAll
     });
-}());
+}())
