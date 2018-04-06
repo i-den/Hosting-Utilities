@@ -73,8 +73,71 @@ var installer = (function defineInstaller() {
             ]
         };
 
+        var php55 = {
+            alwaysInstall: {
+                "bz2": "switch_ea-php55-php-bz2",
+                "calendar": "switch_ea-php55-php-calendar",
+                "curl": "switch_ea-php55-php-curl",
+                "exif": "switch_ea-php55-php-exif",
+                "ftp": "switch_ea-php55-php-ftp",
+                "gettext": "switch_ea-php55-php-gettext",
+                "gmp": "switch_ea-php55-php-gmp",
+                "iconv": "switch_ea-php55-php-iconv",
+                "xml": "switch_ea-php55-php-xml"
+            },
+            map: {
+                "bcmath": "switch_ea-php55-php-bcmath",
+                "dba": "switch_ea-php55-php-dba",
+                "enchant": "switch_ea-php55-php-enchant",
+                "fileinfo": "switch_ea-php55-php-fileinfo",
+                "gd": "switch_ea-php55-php-gd",
+                "imap": "switch_ea-php55-php-imap",
+                "intl": "switch_ea-php55-php-intl",
+                "ldap": "switch_ea-php55-php-ldap",
+                "mbstring": "switch_ea-php55-php-mbstring",
+                "mcrypt": "switch_ea-php55-php-mcrypt",
+                "mysqlnd": "switch_ea-php55-php-mysqlnd",
+                "odbc": "switch_ea-php55-php-odbc",
+                "opcache": "switch_ea-php55-php-opcache",
+                "pdo": "switch_ea-php55-php-pdo",
+                "pgsql": "switch_ea-php55-php-pgsql",
+                "phalcon": "switch_ea-php55-php-phalcon",
+                "posix": "switch_ea-php55-php-posix",
+                "pspell": "switch_ea-php55-php-pspell",
+                "recode": "switch_ea-php55-php-recode",
+                "snmp": "switch_ea-php55-php-snmp",
+                "soap": "switch_ea-php55-php-soap",
+                "sockets": "switch_ea-php55-php-sockets",
+                "sourceguardian": "switch_ea-php55-php-sourceguardian",
+                "suhosin": "switch_ea-php55-php-suhosin",
+                "tidy": "switch_ea-php55-php-tidy",
+                "xmlrpc": "switch_ea-php55-php-xmlrpc",
+                "zip": "switch_ea-php55-php-zip"
+            },
+            installedByDefault: ["dom", "json", "phar", "wddx", "xmlreader", "xmlwriter", "xsl"],
+            additionalInfo: {
+                "ffmpeg": "FFMPEG Needs Installation for PHP 5.5",
+                "imagick": "IMAGICK Needs Installation for PHP 5.5 - yum install ImageMagick-devel | WHM -> Module Installers -> PHP Pecl [Manage] -> imagick",
+                "ioncube_loader": "IONCUBE NEEDED for PHP 5.5 - WHM -> Tweak Settings -> PHP -> cPanel PHP loader -> ioncube",
+                "magickwand": "MagickWand is the first step of installing ImageMagick - yum install ImageMagick-devel"
+            },
+            notAvailableOnVPS: [
+                "apcu", "apm", "ares", "big_int", "bitset", "brotli", "bz2_filter", "dbase", "dbx",
+                "doublemetaphone", "eio", "geoip", "gmagick", "gnupg", "haru", "hidef", "htscanner",
+                "http", "igbinary", "inotify", "interbase", "ioncube_loader_4", "jsmin", "libevent",
+                "libsodium", "lzf", "mailparse", "memcache", "memcached", "mongo", "mongodb", "msgpack",
+                "mssql", "mysql", "mysqli", "ncurses", "nd_mysql", "nd_mysqli", "nd_pdo_mysql", "oauth",
+                "oci8", "pdf", "pdo_dblib", "pdo_firebird", "pdo_mysql", "pdo_oci", "pdo_odbc", "pdo_pgsql",
+                "pdo_sqlite", "phalcon3", "propro", "quickhash", "radius", "raphf", "rar", "redis", "rsync",
+                "solr", "spl_types", "ssh2", "stats", "stem", "stomp", "sybase_ct", "sysvmsg", "sysvsem",
+                "sysvshm", "timezonedb", "trader", "translit", "uploadprogress", "uri_template", "uuid",
+                "weakref", "Xcache_3", "xdebug", "xrange", "yaf", "yaml", "yaz", "zend_guard_loader", "zmq"
+            ]
+        };
+
         return {
-            php54: php54
+            php54: php54,
+            php55: php55
         }
     }());
 
@@ -180,6 +243,9 @@ var installer = (function defineInstaller() {
             switch (cPanelPHPVerInfo.version) {
                 case 54:
                     predefInfo = versInfo.php54;
+                    break;
+                case 55:
+                    predefInfo = versInfo.php55;
                     break;
             }
 
