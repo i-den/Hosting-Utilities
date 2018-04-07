@@ -155,9 +155,16 @@ var grabber = (function defineGrabber() {
             })
         }
 
-        function findAvailablePhpVersionsOnThisCpanel(){
+        function findAvailablePhpVersionsOnThisCpanel(limitTo54AndAbove = true){
             Array.from(document.getElementsByTagName("option")).map(function (currentValue) {
-                availablePhpVersions.push(String(currentValue.value));
+                if(limitTo54AndAbove){
+                    if(Number(currentValue.value) >= 5.4){
+                        availablePhpVersions.push(String(currentValue.value))
+                    }
+                }
+                else{
+                    availablePhpVersions.push(String(currentValue.value));
+                }
             });
         }
 
@@ -362,6 +369,24 @@ var grabber = (function defineGrabber() {
         });
 
     }
+    
+        function addSelected(...versions) {
+        //:TODO add checks and helping messages if the arguments are in wrong format
+         var passedVersions = Array.from(arguments);
+         passedVersions.map( ver => {
+             availablePhpVersions.push(String(ver / 10));
+         });
+
+
+         var fireRequestForEachVersionGiven = passedVersions.map( singleVersion => {
+             return _sendPostToGetExtentionsForSpecificVer(singleVersion / 10);
+         });
+
+         Promise.all(fireRequestForEachVersionGiven).then( results =>{
+            _logger.logInfo(`All requests for selected versions finished`);
+            _finder.processReturnedJson(results);
+         });
+    }
 
     (function displayHelp() { _logger.help() }());
 
@@ -383,6 +408,7 @@ var grabber = (function defineGrabber() {
         v: reportStoredVersions,
         getJSON: getJSON,
         clear: clear,
+        addSelected:addSelected,
         addAll: addAll
     });
 }())
