@@ -7,7 +7,12 @@
 ##### 4. Select PHP Version from the Dropdown for each Version that will be Installed
 
 ```javascript
+// Add Each Version to JSON
 grabber.add54() // Adds PHP 5.4 Extensions
 grabber.add55() -- grabber.add56() -- grabber.add70() -- grabber.add71() -- grabber.add72()
+
+// Add Custom
+grabber.addCustom(54) // Adds PHP 5.4 Extensions
+grabber.addCustom(55) -- grabber.addCustom(56) -- grabber.addCustom(70) -- grabber.addCustom(71) -- grabber.addCustom(72)
 ```
 
