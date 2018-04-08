@@ -33,3 +33,7 @@ grabber.clear()
 ```javascript
 grabber.v()
 ```
+
+##### 5. Login to VPS
+##### 6. WHM -> EasyApache4 -> Customize -> PHP Extensions
+
