@@ -3,6 +3,9 @@
 
 ##### 1. Navigate to cPanel -> Select PHP Version
 ##### 2. Open Console (F12 / Right Click -> Inspect -> Console)
-##### 3. Copy / Paste<a href="https://github.com/i-den/utilities/blob/master/JavaScript/selectorGrabber.js">Selector Grabber</a> 
+##### 3. Copy / Paste <a href="https://github.com/i-den/utilities/blob/master/JavaScript/selectorGrabber.js">Selector Grabber</a> 
 
+```javascript
+asd
+```
 
