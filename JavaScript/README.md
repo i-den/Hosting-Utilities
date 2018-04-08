@@ -8,10 +8,6 @@
 
 ```javascript
 grabber.add54() // Adds PHP 5.4 Extensions
-grabber.add55()
-grabber.add56()
-grabber.add70()
-grabber.add71()
-grabber.add72()
+grabber.add55() -- grabber.add56() -- grabber.add70() -- grabber.add71() -- grabber.add72()
 ```
 
