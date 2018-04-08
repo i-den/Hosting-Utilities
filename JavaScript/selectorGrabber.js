@@ -56,7 +56,10 @@ var grabber = (function defineGrabber() {
             }
             console.log("%c \\-- Select PHP Version from the Top Left dropdown, then ", style + "color: #8daed6;");
             console.log("  |-- grabber.add54() - %c All Extensions for PHP 5.4 are added to a JSON", "color: green;");
-            console.log("  |-- grabber.add55() --  grabber.add56() --  grabber.add70() --  grabber.add71() --  grabber.add72()");
+            console.log("  |-- add55() --  add56() --  add70() --  add71() --  add72()");
+
+            console.log("  |-- grabber.addCustom(54) - %c All Extensions for PHP 5.4 are added to a JSON", "color: green;");
+            console.log("  |-- addCustom(55) --  addCustom(56) --  addCustom(70) --  addCustom(71) --  addCustom(72)");
 
             console.log("%c \\-- This will remove all stored PHP Extensions for a version that were stored in the JSON ", style + "color: #8daed6;");
             console.log("  |-- grabber.rm54() - %c All Extensions for PHP 5.4 are removed from the JSON", "color: green;");
