@@ -34,19 +34,22 @@ grabber.clear()
 grabber.v()
 ```
 
+###### 4.5 When Ready - Get JSON
+```javascript
+grabber.getJSON()
+```
+
+
+
 ##### 5. Login to VPS
 ##### 6. WHM -> EasyApache4 -> Customize -> PHP Extensions
 ##### 7. Select Each PHP Version and All from the Dropdown
 ##### 8. Open Console (F12 / Right Click -> Inspect -> Console)
 ##### 9. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/extInstaller.js">Extension Installer</a>
 
-###### 9.1 Adding PHP Extension for Installation on the VPS
+###### 9.1 The `` Are MANDATORY. Replace the JSON_GOES_HERE with the JSON from 
 ```javascript
-grabber.add54()
-grabber.addCustom(54)
-
-add55() -- add56() -- add70() -- add71() -- add72()
-addCustom(55) -- addCustom(56) -- addCustom(70) -- addCustom(71) -- addCustom(72)
+installer.install(`JSON_GOES_HERE`)
 ```
 
 
