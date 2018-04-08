@@ -301,7 +301,7 @@ var grabber = (function defineGrabber() {
         }
     }
 
-    // TODO: REFACTOR
+    // TODO: REFACTOR BEGIN
     // Functionality -> api
     // Authentication -> _auth
     //
@@ -378,13 +378,13 @@ var grabber = (function defineGrabber() {
     }
     //
     //
-    // TODO: REFACTOR
+    // TODO: REFACTOR END
 
     (function displayHelp() {
         _logger.help();
     }());
 
-    // TODO: adAll, addSelected not returned, fix bugs
+    // TODO: addAll, addSelected not returned, fix bugs
     return Object.freeze({
         add54: api.add54,
         rm54: api.rm54,
