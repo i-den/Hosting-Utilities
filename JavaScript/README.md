@@ -3,7 +3,7 @@
 
 ##### 1. Navigate to cPanel -> Select PHP Version
 ##### 2. Open Console (F12 / Right Click -> Inspect -> Console)
-##### 3. Copy / Paste <a href="https://github.com/i-den/utilities/blob/master/JavaScript/selectorGrabber.js">Selector Grabber</a> 
+##### 3. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/selectorGrabber.js">Selector Grabber</a> 
 ##### 4. Select PHP Version from the Dropdown for each Version that will be Installed
 
 ###### 4.1 Adding PHP Extension for Installation on the VPS
@@ -36,4 +36,5 @@ grabber.v()
 
 ##### 5. Login to VPS
 ##### 6. WHM -> EasyApache4 -> Customize -> PHP Extensions
+##### 7. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/extInstaller.js">Extension Installer</a>
 
