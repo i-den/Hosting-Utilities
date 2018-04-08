@@ -49,9 +49,14 @@ grabber.getJSON()
 
 
 ##### 5. Login to VPS
+
 ##### 6. WHM -> EasyApache4 -> Customize -> PHP Extensions
+
 ##### 7. Select Each PHP Version and All from the Dropdown
+<img src="https://i.imgur.com/Cx7oRFy.png">
+
 ##### 8. Open Console (F12 / Right Click -> Inspect -> Console)
+
 ##### 9. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/extInstaller.js">Extension Installer</a>
 
 ###### 9.1 The `` Are MANDATORY. Replace the JSON_GOES_HERE with the JSON from 
