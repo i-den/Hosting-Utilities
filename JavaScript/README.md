@@ -36,5 +36,8 @@ grabber.v()
 
 ##### 5. Login to VPS
 ##### 6. WHM -> EasyApache4 -> Customize -> PHP Extensions
-##### 7. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/extInstaller.js">Extension Installer</a>
+##### 7. Open Console (F12 / Right Click -> Inspect -> Console)
+##### 8. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/extInstaller.js">Extension Installer</a>
+##### 9. Select PHP Version from the Dropdown for each Version that will be Installed
+
 
