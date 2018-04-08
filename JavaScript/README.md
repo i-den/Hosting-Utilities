@@ -69,7 +69,8 @@ installer.install(`JSON_GOES_HERE`)
 
 Extensions | Action
 ------------ | -------------
-
+z | z
+------------ | -------------
 
 
 
