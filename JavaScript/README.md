@@ -68,7 +68,7 @@ installer.install(`JSON_GOES_HERE`)
 ##### 10. Fix Additional Dependencies:
 
 * ffmpeg:
-asd
+** via yum
 
 
 
