@@ -125,7 +125,7 @@ var grabber = (function defineGrabber() {
 
     _auth = (function defineAuth() {
         function verifySelectedDomVer(ver) {
-            ver = ver[0] + "." + ver[1];
+            ver = (ver + "")[0] + "." + (ver + "")[1];
             return document.querySelector("select[name=lveversion] option:checked").textContent === ver;
         }
 
@@ -141,17 +141,7 @@ var grabber = (function defineGrabber() {
 
     api = (function defineManipulator() {
         function add54() {
-            if (!_auth.verifySelectedDomVer("5.4")) {
-                _logger.logErr("Wrong Version Selected");
-            } else if (_finder.findVersionAmongSaved(54)) {
-                _logger.logErr("Version 5.4 already saved");
-            } else {
-                allPHPExtensions.push({
-                    version: 54,
-                    extensions: _getVersionExtensions()
-                });
-                _logger.logInfo("Saved Extensions for 5.4");
-            }
+            addCustom(54);
         }
 
         function rm54() {
@@ -159,17 +149,7 @@ var grabber = (function defineGrabber() {
         }
 
         function add55() {
-            if (!_auth.verifySelectedDomVer("5.5")) {
-                _logger.logErr("Wrong Version Selected");
-            } else if (_finder.findVersionAmongSaved(55)) {
-                _logger.logErr("Version 5.5 already saved");
-            } else {
-                allPHPExtensions.push({
-                    version: 55,
-                    extensions: _getVersionExtensions()
-                });
-                _logger.logInfo("Saved Extensions for 5.5");
-            }
+            addCustom(55);
         }
 
         function rm55() {
@@ -177,17 +157,7 @@ var grabber = (function defineGrabber() {
         }
 
         function add56() {
-            if (!_auth.verifySelectedDomVer("5.6")) {
-                _logger.logErr("Wrong Version Selected");
-            } else if (_finder.findVersionAmongSaved(56)) {
-                _logger.logErr("Version 5.6 already saved");
-            } else {
-                allPHPExtensions.push({
-                    version: 56,
-                    extensions: _getVersionExtensions()
-                });
-                _logger.logInfo("Saved Extensions for 5.6");
-            }
+            addCustom(56);
         }
 
         function rm56() {
@@ -195,17 +165,7 @@ var grabber = (function defineGrabber() {
         }
 
         function add70() {
-            if (!_auth.verifySelectedDomVer("7.0")) {
-                _logger.logErr("Wrong Version Selected");
-            } else if (_finder.findVersionAmongSaved(70)) {
-                _logger.logErr("Version 7.0 already saved");
-            } else {
-                allPHPExtensions.push({
-                    version: 70,
-                    extensions: _getVersionExtensions()
-                });
-                _logger.logInfo("Saved Extensions for 7.0");
-            }
+            addCustom(70);
         }
 
         function rm70() {
@@ -213,17 +173,7 @@ var grabber = (function defineGrabber() {
         }
 
         function add71() {
-            if (!_auth.verifySelectedDomVer("7.1")) {
-                _logger.logErr("Wrong Version Selected");
-            } else if (_finder.findVersionAmongSaved(71)) {
-                _logger.logErr("Version 7.1 already saved");
-            } else {
-                allPHPExtensions.push({
-                    version: 71,
-                    extensions: _getVersionExtensions()
-                });
-                _logger.logInfo("Saved Extensions for 7.1");
-            }
+            addCustom(71);
         }
 
         function rm71() {
@@ -240,7 +190,7 @@ var grabber = (function defineGrabber() {
 
         function addCustom(ver) {
             if (!/^[\d]{2}$/.test(ver)) {
-                _logger.logErr("Invalid Version, Enter a Number Like: 71, 72, 73, 74")
+                _logger.logErr("Invalid Version, Enter a Number Like: 55, 71, 73, 74")
             } else if (!_auth.verifySelectedDomVer(ver)) {
                 _logger.logErr("Wrong Version Selected");
             } else if (_finder.findVersionAmongSaved(ver)) {
@@ -352,7 +302,8 @@ var grabber = (function defineGrabber() {
     }
 
     // TODO: REFACTOR
-    //
+    // Functionality -> api
+    // Authentication -> _auth
     //
     function addAll() {
         _finder.findAvailablePhpVersionsOnThisCpanel();
@@ -430,7 +381,7 @@ var grabber = (function defineGrabber() {
     // TODO: REFACTOR
 
     (function displayHelp() {
-        _logger.help()
+        _logger.help();
     }());
 
     return Object.freeze({
