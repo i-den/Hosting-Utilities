@@ -41,9 +41,9 @@ grabber.clear()
 grabber.v()
 ```
 
-###### 4.5 When Ready - Get JSON !! WITHOUT " AT START AND END !!
+###### 4.5 When Ready - Get JSON
 ```javascript
-grabber.getJSON()
+grabber.getJSON() // !! WITHOUT " AT START AND END !!
 ```
 <img src="https://camo.githubusercontent.com/8d6e2e6fb83a4091bbd1b835b1a6af5bb33ef880/68747470733a2f2f692e696d6775722e636f6d2f79574b7a3962752e706e67"></img>
 
