@@ -62,6 +62,7 @@ grabber.getJSON() // !! WITHOUT " AT START AND END !!
 ```javascript
 installer.install(`JSON_GOES_HERE`)
 ```
+
 <img src="https://camo.githubusercontent.com/b49f8d176ed61dec0ade2ef681c71a10710dbd05/68747470733a2f2f692e696d6775722e636f6d2f633769506a4d762e706e67">
 
 ##### 10. Fix Additional Dependencies:
