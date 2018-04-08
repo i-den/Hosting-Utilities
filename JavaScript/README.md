@@ -5,6 +5,7 @@
 <img src="https://i.imgur.com/aABBo6O.png">
 
 ##### 2. Open Console (F12 / Right Click -> Inspect -> Console)
+<img src="https://i.imgur.com/KPYVtOQ.png">
 
 ##### 3. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/selectorGrabber.js">Selector Grabber</a>
 <img src="https://i.imgur.com/pe5ieD3.png">
