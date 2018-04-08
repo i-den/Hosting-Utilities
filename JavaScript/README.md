@@ -15,3 +15,11 @@ add55() -- add56() -- add70() -- add71() -- add72()
 addCustom(55) -- addCustom(56) -- addCustom(70) -- addCustom(71) -- addCustom(72)
 ```
 
+###### 4.2 Removing PHP Extensions that were added by mistake
+```javascript
+grabber.rm54()
+grabber.rmCustom(54)
+
+rm55() -- rm56() -- rm70() -- rm71() -- rm72()
+rmCustom(55) -- rmCustom(56) -- rmCustom(70) -- rmCustom(71) -- rmCustom(72)
+```
