@@ -38,7 +38,7 @@ grabber.v()
 ```javascript
 grabber.getJSON()
 ```
-
+<img src="https://prnt.sc/j2n42m"></img>
 
 
 ##### 5. Login to VPS
