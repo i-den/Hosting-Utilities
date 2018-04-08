@@ -23,3 +23,13 @@ grabber.rmCustom(54)
 rm55() -- rm56() -- rm70() -- rm71() -- rm72()
 rmCustom(55) -- rmCustom(56) -- rmCustom(70) -- rmCustom(71) -- rmCustom(72)
 ```
+
+###### 4.2 Clear PHP Extensions
+```javascript
+grabber.clear()
+```
+
+###### 4.2 Report Stored PHP Extensions in the JSON
+```javascript
+grabber.v()
+```
