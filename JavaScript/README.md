@@ -18,5 +18,8 @@ addCustom(55) -- addCustom(56) -- addCustom(70) -- addCustom(71) -- addCustom(72
 // Remove Version
 grabber.rm54() // Remove PHP 5.4 Extensions from JSON
 rm55() -- rm56() -- rm70() -- rm71() -- rm72()
+grabber.rmCustom(54)
+rmCustom(55) -- rmCustom(56) -- rmCustom(70) -- rmCustom(71) -- rmCustom(72)
+
 ```
 
