@@ -129,13 +129,13 @@ var grabber = (function defineGrabber() {
             return document.querySelector("select[name=lveversion] option:checked").textContent === ver;
         }
 
-        function veryExtArrNotEmpty() {
+        function verifyExtArrNotEmpty() {
             return allPHPExtensions.length > 0;
         }
 
         return {
             verifySelectedDomVer: verifySelectedDomVer,
-            veryExtArrNotEmpty: veryExtArrNotEmpty
+            verifyExtArrNotEmpty: verifyExtArrNotEmpty
         }
     }());
 
@@ -213,7 +213,7 @@ var grabber = (function defineGrabber() {
         }
 
         function reportStoredVersions() {
-            if (!_auth.veryExtArrNotEmpty()) {
+            if (!_auth.verifyExtArrNotEmpty()) {
                 _logger.logErr("NO EXTENSIONS SAVED");
             } else {
                 _logger.logStoredVersionExts();
@@ -221,7 +221,7 @@ var grabber = (function defineGrabber() {
         }
 
         function clear() {
-            if (!_auth.veryExtArrNotEmpty()) {
+            if (!_auth.verifyExtArrNotEmpty()) {
                 _logger.logErr("THERE ARE NO EXTENSIONS TO REMOVE");
             } else {
                 allPHPExtensions = [];
@@ -230,7 +230,7 @@ var grabber = (function defineGrabber() {
         }
 
         function getJSON() {
-            if (!_auth.veryExtArrNotEmpty()) {
+            if (!_auth.verifyExtArrNotEmpty()) {
                 _logger.logErr("NO EXTENSIONS SAVED");
             } else {
                 return JSON.stringify(allPHPExtensions);
@@ -294,7 +294,7 @@ var grabber = (function defineGrabber() {
 
     // TODO: Hanging out because it's dependency for _finder.processReturnedJson
     function getJSON() {
-        if (!_auth.veryExtArrNotEmpty()) {
+        if (!_auth.verifyExtArrNotEmpty()) {
             _logger.logErr("NO EXTENSIONS SAVED");
         } else {
             return JSON.stringify(allPHPExtensions);
