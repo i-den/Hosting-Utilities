@@ -65,6 +65,11 @@ installer.install(`JSON_GOES_HERE`)
 ```
 <img src="https://i.imgur.com/c7iPjMv.png">
 
+##### 10. Fix Additional Dependencies:
+
+Extensions | Action
+------------ | -------------
+
 
 
 
