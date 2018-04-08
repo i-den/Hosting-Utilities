@@ -360,7 +360,7 @@ var grabber = (function defineGrabber() {
         }
     }
 
-    // BOB, REFACTOR YOUR SH*T
+    // TODO: REFACTOR
     //
     //
     function addAll() {
@@ -434,10 +434,9 @@ var grabber = (function defineGrabber() {
         });
         _logger.logInfo(`Saved Extensions for ${version}`);
     }
-
     //
     //
-    //
+    // TODO: REFACTOR
 
     (function displayHelp() {
         _logger.help()
