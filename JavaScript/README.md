@@ -1,4 +1,12 @@
-<p align="center"><img src="https://cloudypro.com/wp-content/uploads/2015/05/cpanel-logo-300x108.png"></img></p>
+/**
+ *     __        __   _       _   _           _     _____
+ *     \ \      / /__| |__   | | | | ___  ___| |_  |  ___|_ _  ___ ___
+ *      \ \ /\ / / _ \ '_ \  | |_| |/ _ \/ __| __| | |_ / _` |/ __/ _ \
+ *       \ V  V /  __/ |_) | |  _  | (_) \__ \ |_  |  _| (_| | (_|  __/
+ *        \_/\_/ \___|_.__/  |_| |_|\___/|___/\__| |_|  \__,_|\___\___|
+ *
+ *                     PHP Extension Installer v1.1
+ */
 
 
 ##### 1. Navigate to cPanel -> Select PHP Version
