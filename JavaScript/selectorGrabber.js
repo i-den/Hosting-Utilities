@@ -115,12 +115,12 @@ var grabber = (function defineGrabber() {
             getJSON();
         }
 
-        return Object.freeze({
+        return {
             findVersionAmongSaved: findVersionAmongSaved,
             findVersIndex: findVersIndex,
             findAvailablePhpVersionsOnThisCpanel: findAvailablePhpVersionsOnThisCpanel,
             processReturnedJson: processReturnedJson
-        })
+        }
     }());
 
     _auth = (function defineAuth() {
