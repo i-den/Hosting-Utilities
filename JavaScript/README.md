@@ -29,6 +29,8 @@ grabber.rmCustom(54)
 rm55() -- rm56() -- rm70() -- rm71() -- rm72()
 rmCustom(55) -- rmCustom(56) -- rmCustom(70) -- rmCustom(71) -- rmCustom(72)
 ```
+<img src="https://i.imgur.com/KJ2zJvk.png">
+
 
 ###### 4.3 Clear PHP Extensions
 ```javascript
