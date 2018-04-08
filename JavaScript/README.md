@@ -68,7 +68,10 @@ installer.install(`JSON_GOES_HERE`)
 ##### 10. Fix Additional Dependencies:
 
 * ffmpeg:
-** via yum
+  * via yum
+* imagick
+  * yum install ImageMagick-devel
+  * WHM -> Module Installers -> PHP Pecl [Manage] -> imagick"
 
 
 
