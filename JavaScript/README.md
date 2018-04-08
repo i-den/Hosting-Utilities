@@ -6,7 +6,8 @@
 
 ##### 2. Open Console (F12 / Right Click -> Inspect -> Console)
 
-##### 3. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/selectorGrabber.js">Selector Grabber</a> 
+##### 3. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/selectorGrabber.js">Selector Grabber</a>
+<img src="https://i.imgur.com/pe5ieD3.png">
 
 ##### 4. Select PHP Version from the Dropdown for each Version that will be Installed
 
