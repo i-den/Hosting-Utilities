@@ -69,10 +69,19 @@ installer.install(`JSON_GOES_HERE`)
 
 * ffmpeg:
   * via yum
+* magickwand
+  * yum install ImageMagick-devel
 * imagick
   * yum install ImageMagick-devel
-  * WHM -> Module Installers -> PHP Pecl [Manage] -> imagick"
-
+  * WHM -> Module Installers -> PHP Pecl [Manage] -> imagick
+* ioncube_loader
+  * WHM -> Tweak Settings -> PHP -> cPanel PHP loader -> ioncube
+* opcache
+  * NO opcache for PHP 5.4
+* phalcon
+  * NO phalcon for PHP 5.4 and 7.2
+* recode
+  * Incompatible with imap, fix dependencies manually
 
 
 
