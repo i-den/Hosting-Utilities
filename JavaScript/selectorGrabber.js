@@ -124,23 +124,24 @@ var grabber = (function defineGrabber() {
     }());
 
     _auth = (function defineAuth() {
-        function verCurrSelDomVer(ver) {
+        function verifySelectedDomVer(ver) {
+            ver = ver[0] + "." + ver[1];
             return document.querySelector("select[name=lveversion] option:checked").textContent === ver;
         }
 
-        function verExtNotEmpty() {
+        function veryExtArrNotEmpty() {
             return allPHPExtensions.length > 0;
         }
 
         return {
-            verCurrSelDomVer: verCurrSelDomVer,
-            verExtNotEmpty: verExtNotEmpty
+            verifySelectedDomVer: verifySelectedDomVer,
+            veryExtArrNotEmpty: veryExtArrNotEmpty
         }
     }());
 
     api = (function defineManipulator() {
         function add54() {
-            if (!_auth.verCurrSelDomVer("5.4")) {
+            if (!_auth.verifySelectedDomVer("5.4")) {
                 _logger.logErr("Wrong Version Selected");
             } else if (_finder.findVersionAmongSaved(54)) {
                 _logger.logErr("Version 5.4 already saved");
@@ -158,7 +159,7 @@ var grabber = (function defineGrabber() {
         }
 
         function add55() {
-            if (!_auth.verCurrSelDomVer("5.5")) {
+            if (!_auth.verifySelectedDomVer("5.5")) {
                 _logger.logErr("Wrong Version Selected");
             } else if (_finder.findVersionAmongSaved(55)) {
                 _logger.logErr("Version 5.5 already saved");
@@ -176,7 +177,7 @@ var grabber = (function defineGrabber() {
         }
 
         function add56() {
-            if (!_auth.verCurrSelDomVer("5.6")) {
+            if (!_auth.verifySelectedDomVer("5.6")) {
                 _logger.logErr("Wrong Version Selected");
             } else if (_finder.findVersionAmongSaved(56)) {
                 _logger.logErr("Version 5.6 already saved");
@@ -194,7 +195,7 @@ var grabber = (function defineGrabber() {
         }
 
         function add70() {
-            if (!_auth.verCurrSelDomVer("7.0")) {
+            if (!_auth.verifySelectedDomVer("7.0")) {
                 _logger.logErr("Wrong Version Selected");
             } else if (_finder.findVersionAmongSaved(70)) {
                 _logger.logErr("Version 7.0 already saved");
@@ -212,7 +213,7 @@ var grabber = (function defineGrabber() {
         }
 
         function add71() {
-            if (!_auth.verCurrSelDomVer("7.1")) {
+            if (!_auth.verifySelectedDomVer("7.1")) {
                 _logger.logErr("Wrong Version Selected");
             } else if (_finder.findVersionAmongSaved(71)) {
                 _logger.logErr("Version 7.1 already saved");
@@ -230,17 +231,7 @@ var grabber = (function defineGrabber() {
         }
 
         function add72() {
-            if (!_auth.verCurrSelDomVer("7.2")) {
-                _logger.logErr("Wrong Version Selected");
-            } else if (_finder.findVersionAmongSaved(72)) {
-                _logger.logErr("Version 7.2 already saved");
-            } else {
-                allPHPExtensions.push({
-                    version: 72,
-                    extensions: _getVersionExtensions()
-                });
-                _logger.logInfo("Saved Extensions for 7.2");
-            }
+            addCustom(72);
         }
 
         function rm72() {
@@ -250,7 +241,7 @@ var grabber = (function defineGrabber() {
         function addCustom(ver) {
             if (!/^[\d]{2}$/.test(ver)) {
                 _logger.logErr("Invalid Version, Enter a Number Like: 71, 72, 73, 74")
-            } else if (!_auth.verCurrSelDomVer(ver)) {
+            } else if (!_auth.verifySelectedDomVer(ver)) {
                 _logger.logErr("Wrong Version Selected");
             } else if (_finder.findVersionAmongSaved(ver)) {
                 _logger.logErr("Version" + ver + " already saved");
@@ -272,7 +263,7 @@ var grabber = (function defineGrabber() {
         }
 
         function reportStoredVersions() {
-            if (!_auth.verExtNotEmpty()) {
+            if (!_auth.veryExtArrNotEmpty()) {
                 _logger.logErr("NO EXTENSIONS SAVED");
             } else {
                 _logger.logStoredVersionExts();
@@ -280,7 +271,7 @@ var grabber = (function defineGrabber() {
         }
 
         function clear() {
-            if (!_auth.verExtNotEmpty()) {
+            if (!_auth.veryExtArrNotEmpty()) {
                 _logger.logErr("THERE ARE NO EXTENSIONS TO REMOVE");
             } else {
                 allPHPExtensions = [];
@@ -289,7 +280,7 @@ var grabber = (function defineGrabber() {
         }
 
         function getJSON() {
-            if (!_auth.verExtNotEmpty()) {
+            if (!_auth.veryExtArrNotEmpty()) {
                 _logger.logErr("NO EXTENSIONS SAVED");
             } else {
                 return JSON.stringify(allPHPExtensions);
@@ -353,7 +344,7 @@ var grabber = (function defineGrabber() {
 
     // TODO: Hanging out because it's dependency for _finder.processReturnedJson
     function getJSON() {
-        if (!_auth.verExtNotEmpty()) {
+        if (!_auth.veryExtArrNotEmpty()) {
             _logger.logErr("NO EXTENSIONS SAVED");
         } else {
             return JSON.stringify(allPHPExtensions);
