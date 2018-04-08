@@ -2,6 +2,6 @@
 
 
 ##### 1. Navigate to cPanel -> Select PHP Version
-##### 2. Open Console
-##### 3. addVer
-##### 4. getJSON
+##### 2. Open Console (F12 / Right Click -> Inspect -> Console)
+##### 3. Copy / <a href="https://github.com/i-den/utilities/blob/master/JavaScript/selectorGrabber.js">Paste Selector Grabber</a> 
+
