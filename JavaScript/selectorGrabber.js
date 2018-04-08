@@ -198,7 +198,7 @@ var grabber = (function defineGrabber() {
             } else {
                 allPHPExtensions.push({
                     version: ver,
-                    extensions: _getVersionExtensions()
+                    extensions: _getEnabledDOMExts()
                 });
                 _logger.logInfo("Saved Extensions for " + ver);
             }
@@ -249,7 +249,7 @@ var grabber = (function defineGrabber() {
             }
         }
 
-        function _getVersionExtensions() {
+        function _getEnabledDOMExts() {
             var phpExtNames = Array.from(document.querySelectorAll("td:nth-child(odd):not(:empty)")),
                 phpExtChkbx = Array.from(document.querySelectorAll("td:nth-child(even):not(:empty) input")),
                 allExtns = [],
