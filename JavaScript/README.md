@@ -24,20 +24,32 @@ rm55() -- rm56() -- rm70() -- rm71() -- rm72()
 rmCustom(55) -- rmCustom(56) -- rmCustom(70) -- rmCustom(71) -- rmCustom(72)
 ```
 
-###### 4.2 Clear PHP Extensions
+###### 4.3 Clear PHP Extensions
 ```javascript
 grabber.clear()
 ```
 
-###### 4.2 Report PHP Versions
+###### 4.4 Report PHP Versions
 ```javascript
 grabber.v()
 ```
 
 ##### 5. Login to VPS
 ##### 6. WHM -> EasyApache4 -> Customize -> PHP Extensions
-##### 7. Open Console (F12 / Right Click -> Inspect -> Console)
-##### 8. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/extInstaller.js">Extension Installer</a>
-##### 9. Select PHP Version from the Dropdown for each Version that will be Installed
+##### 7. Select Each PHP Version and All from the Dropdown
+##### 8. Open Console (F12 / Right Click -> Inspect -> Console)
+##### 9. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/extInstaller.js">Extension Installer</a>
+
+###### 9.1 Adding PHP Extension for Installation on the VPS
+```javascript
+grabber.add54()
+grabber.addCustom(54)
+
+add55() -- add56() -- add70() -- add71() -- add72()
+addCustom(55) -- addCustom(56) -- addCustom(70) -- addCustom(71) -- addCustom(72)
+```
+
+
+
 
 
