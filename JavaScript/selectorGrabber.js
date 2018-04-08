@@ -384,6 +384,7 @@ var grabber = (function defineGrabber() {
         _logger.help();
     }());
 
+    // TODO: adAll, addSelected not returned, fix bugs
     return Object.freeze({
         add54: api.add54,
         rm54: api.rm54,
@@ -401,8 +402,6 @@ var grabber = (function defineGrabber() {
         rmCustom: api.rmCustom,
         v: api.reportStoredVersions,
         getJSON: getJSON,
-        clear: api.clear,
-        addSelected: addSelected,
-        addAll: addAll
+        clear: api.clear
     });
 }());
