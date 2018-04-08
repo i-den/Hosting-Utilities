@@ -38,7 +38,7 @@ grabber.v()
 ```javascript
 grabber.getJSON()
 ```
-<img src="https://i.imgur.com/yWKz9bu.png"></img>
+<img src="https://camo.githubusercontent.com/8d6e2e6fb83a4091bbd1b835b1a6af5bb33ef880/68747470733a2f2f692e696d6775722e636f6d2f79574b7a3962752e706e67"></img>
 
 
 ##### 5. Login to VPS
