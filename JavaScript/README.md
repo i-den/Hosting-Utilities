@@ -8,11 +8,15 @@
 
 ```javascript
 // Each Version
-grabber.add54() // Adds PHP 5.4 Extensions
-grabber.add55() -- grabber.add56() -- grabber.add70() -- grabber.add71() -- grabber.add72()
+grabber.add54() // Adds PHP 5.4 Extensions to JSON
+add55() -- add56() -- add70() -- add71() -- add72()
 
 // Type Version
-grabber.addCustom(54) // Adds PHP 5.4 Extensions
-grabber.addCustom(55) -- grabber.addCustom(56) -- grabber.addCustom(70) -- grabber.addCustom(71) -- grabber.addCustom(72)
+grabber.addCustom(54) // Adds PHP 5.4 Extensions to JSON
+addCustom(55) -- addCustom(56) -- addCustom(70) -- addCustom(71) -- addCustom(72)
+
+// Remove Version
+grabber.rm54() // Remove PHP 5.4 Extensions from JSON
+rm55() -- rm56() -- rm70() -- rm71() -- rm72()
 ```
 
