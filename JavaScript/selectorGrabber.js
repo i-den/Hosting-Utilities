@@ -50,7 +50,10 @@ var grabber = (function defineGrabber() {
    \\ V  V /  __/ |_) | |  _  | (_) \\__ \\ |_  |  _| (_| | (_|  __/
     \\_/\\_/ \\___|_.__/  |_| |_|\\___/|___/\\__| |_|  \\__,_|\\___\\___|
                                                                  
-                    PHP Extension Grabber v1.5`;
+                    PHP Extension Grabber v1.5
+    https://github.com/i-den/utilities/tree/master/JavaScript
+    
+    `;
 
                 console.log($_$);
             }
@@ -69,14 +72,15 @@ var grabber = (function defineGrabber() {
             console.log("  |-- grabber.v() - %c List all PHP Versions that you saved", "color: green;");
             console.log("  |-- grabber.clear() - %c Clears the JSON", "color: green;");
             console.log("  |-- grabber.getJSON() - %c Gets the JSON to Paste in the VPS' Console", "color: green;");
+
         }
 
-        return Object.freeze({
+        return {
             logErr: logError,
             logInfo: logInfo,
             logStoredVersionExts: logStoredVersionExts,
             help: help
-        });
+        };
     }());
 
     _finder = (function defineFinder() {
