@@ -5,7 +5,7 @@
 <img src="https://camo.githubusercontent.com/9509b9726f804458c90e52ffa926fd2c975b6d18/68747470733a2f2f692e696d6775722e636f6d2f614142426f364f2e706e67">
 
 ##### 2. Open Console (F12 / Right Click -> Inspect -> Console)
-<img src="https://i.imgur.com/kLDY6vM.png">
+<img src="https://camo.githubusercontent.com/2d0f09a0f9d02b5317c8e7f0710de56f92b94ebe/68747470733a2f2f692e696d6775722e636f6d2f6b4c445936764d2e706e67">
 
 ##### 3. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/selectorGrabber.js">Selector Grabber</a>
 <img src="https://camo.githubusercontent.com/5a4d24f05495a8c0eb0de6c0afcf9936f5d0b34b/68747470733a2f2f692e696d6775722e636f6d2f706535696544332e706e67">
