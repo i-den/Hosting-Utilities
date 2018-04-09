@@ -385,7 +385,10 @@ var installer = (function defineInstaller() {
    \\ V  V /  __/ |_) | |  _  | (_) \\__ \\ |_  |  _| (_| | (_|  __/
     \\_/\\_/ \\___|_.__/  |_| |_|\\___/|___/\\__| |_|  \\__,_|\\___\\___|
                                                                  
-                    PHP Extension Installer v1.1`;
+                    PHP Extension Installer v1.1
+     https://github.com/i-den/utilities/tree/master/JavaScript
+                    
+                    `;
 
                 console.log($_$);
             }
