@@ -8,7 +8,7 @@
 <img src="https://camo.githubusercontent.com/2d0f09a0f9d02b5317c8e7f0710de56f92b94ebe/68747470733a2f2f692e696d6775722e636f6d2f6b4c445936764d2e706e67">
 
 ##### 3. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/selectorGrabber.js">Selector Grabber</a>
-<img src="https://i.imgur.com/QYzpqSG.png">
+<img src="https://camo.githubusercontent.com/42a05cda55f2c68a50f6c55d89a34c4c9208f7e4/68747470733a2f2f692e696d6775722e636f6d2f51597a707153472e706e67">
 
 ##### 4. Select PHP Version from the Dropdown for each Version that will be Installed
 
@@ -22,11 +22,11 @@ add55() -- add56() -- add70() -- add71() -- add72()
 addCustom(55) -- addCustom(56) -- addCustom(70) -- addCustom(71) -- addCustom(72)
 addSelected(54, 55) -- addSelected(56, 70, 71) -- addSelected(72, 56, 55)
 ```
-<img src="https://i.imgur.com/eFYsvrw.png">
+<img src="https://camo.githubusercontent.com/fbe375147d30bdbd8247f0f0645258b74a815da2/68747470733a2f2f692e696d6775722e636f6d2f654659737672772e706e67">
 
-<img src="https://i.imgur.com/FCdgssE.png">
+<img src="https://camo.githubusercontent.com/eaad20b12b78748a8820b273f8f38a1a93b927ad/68747470733a2f2f692e696d6775722e636f6d2f464364677373452e706e67">
 
-<img src="https://i.imgur.com/NQQdpx6.png">
+<img src="https://camo.githubusercontent.com/5a62ea3bd709ac896313d9f2f2403fe9531943f4/68747470733a2f2f692e696d6775722e636f6d2f4e5151647078362e706e67">
 
 ###### 4.2 Removing PHP Extensions that were added by mistake
 ```javascript
