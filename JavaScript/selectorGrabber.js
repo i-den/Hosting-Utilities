@@ -5,7 +5,7 @@
  *       \ V  V /  __/ |_) | |  _  | (_) \__ \ |_  |  _| (_| | (_|  __/
  *        \_/\_/ \___|_.__/  |_| |_|\___/|___/\__| |_|  \__,_|\___\___|
  *
- *                     PHP Extension Grabber v1.5
+ *                     PHP Extension Grabber v2.0
  */
 
 var grabber = (function defineGrabber() {
@@ -50,7 +50,7 @@ var grabber = (function defineGrabber() {
    \\ V  V /  __/ |_) | |  _  | (_) \\__ \\ |_  |  _| (_| | (_|  __/
     \\_/\\_/ \\___|_.__/  |_| |_|\\___/|___/\\__| |_|  \\__,_|\\___\\___|
                                                                  
-                    PHP Extension Grabber v1.5
+                    PHP Extension Grabber v2.0
     https://github.com/i-den/utilities/tree/master/JavaScript
     
     `;
