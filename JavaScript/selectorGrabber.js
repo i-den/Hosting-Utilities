@@ -59,10 +59,14 @@ var grabber = (function defineGrabber() {
             }
             console.log("%c \\-- Select PHP Version from the Top Left dropdown, then ", style + "color: #8daed6;");
             console.log("  |-- grabber.add54() - %c All Extensions for PHP 5.4 are added to a JSON", "color: green;");
-            console.log("  |-- add55() --  add56() --  add70() --  add71() --  add72()");
-
             console.log("  |-- grabber.addCustom(54) - %c All Extensions for PHP 5.4 are added to a JSON", "color: green;");
+            console.log("  |-- grabber.addSelected(54, 55, 56) - %c Choose versions - RECOMMENDED", "color: green;");
+
+            console.log("  |");
+
+            console.log("  |-- add55() --  add56() --  add70() --  add71() --  add72()");
             console.log("  |-- addCustom(55) --  addCustom(56) --  addCustom(70) --  addCustom(71) --  addCustom(72)");
+            console.log("  |-- addSelected(54, 55) -- addSelected(56, 70, 71) -- addSelected(72, 56, 55)");
 
             console.log("%c \\-- This will remove all stored PHP Extensions for a version that were stored in the JSON ", style + "color: #8daed6;");
             console.log("  |-- grabber.rm54() - %c All Extensions for PHP 5.4 are removed from the JSON", "color: green;");
@@ -94,7 +98,7 @@ var grabber = (function defineGrabber() {
             return undefined;
         }
 
-        function processInteger(int){
+        function processInteger(int) {
             if (int < 10) {
                 availablePhpVersions.push(int.toFixed(1));
             } else {
@@ -102,19 +106,19 @@ var grabber = (function defineGrabber() {
             }
         }
 
-        function processFloat(flt){
+        function processFloat(flt) {
             availablePhpVersions.push(String(flt));
         }
 
-        function prepareDataToBeSent(arr){
-            arr.map( number => {
-                if(number % 1 === 0){
+        function prepareDataToBeSent(arr) {
+            arr.map(number => {
+                if (number % 1 === 0) {
                     processInteger(number);
-                }else{
+                } else {
                     processFloat(number);
                 }
             });
-            _logger.logInfo(` versions to be used in request are: ${availablePhpVersions}`);
+            _logger.logInfo(`Versions to be used in request are: ${availablePhpVersions.join(" ")}`);
         }
 
         function findVersIndex(verObj) {
@@ -169,7 +173,7 @@ var grabber = (function defineGrabber() {
         }
     }());
 
-    api = (function defineManipulator() {
+    api = (function defineAPI() {
         function add54() {
             addCustom(54);
         }
@@ -309,11 +313,12 @@ var grabber = (function defineGrabber() {
                 request.open("POST", uri); // uri defined in template
                 request.onreadystatechange = function () {
                     if (request.readyState === 4 && request.status === 200) {
-                        _logger.logInfo(`PhP extensions for ${ver} acquired`);
+                        _logger.logInfo(`PHP Extensions for ${ver} acquired`);
                         return resolve(JSON.parse(request.responseText))
                     }
                 };
                 request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                // TODO: encodeFormData?
                 request.send(encodeFormData(request_data));
             });
         }
@@ -338,15 +343,14 @@ var grabber = (function defineGrabber() {
                 });
                 _logger.logInfo(`Saved Extensions for ${version}`);
             } else {
-                _logger.logErr(`${version} already saved.No changes have been made.`)
+                _logger.logErr(`${version} already saved. No changes have been made.`)
             }
-
         }
 
         function addAll() {
             _finder.findAvailablePhpVersionsOnThisCpanel();
-            _logger.logInfo("If available, php versions below 5.4 are ignored and won't be shown or processed");
-            console.warn(`php vers: ${availablePhpVersions}`);
+            _logger.logInfo(`PHP Versions: ${availablePhpVersions}`);
+
             if (!availablePhpVersions || availablePhpVersions.length === 0) {
                 _logger.logErr("Something went wrong, contact this script developers.");
             }
@@ -359,7 +363,6 @@ var grabber = (function defineGrabber() {
                 _logger.logInfo(`All requests finished`);
                 _finder.processReturnedJson(results);
             });
-
         }
 
         return {
@@ -386,7 +389,6 @@ var grabber = (function defineGrabber() {
             sendPostToGetExtentionsForSpecificVer: _sendPostToGetExtentionsForSpecificVer
         }
     }());
-
 
     function addSelected() {
         availablePhpVersions = [];
