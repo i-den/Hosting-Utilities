@@ -16,7 +16,7 @@
 ```javascript
 grabber.add54()
 grabber.addCustom(54)
-grabber.addSelected(54, 55, 56, 70, 71, 72)
+grabber.addSelected(54, 55, 56, 70, 71, 72)  // Faster - Recommended
 
 add55() -- add56() -- add70() -- add71() -- add72()
 addCustom(55) -- addCustom(56) -- addCustom(70) -- addCustom(71) -- addCustom(72)
