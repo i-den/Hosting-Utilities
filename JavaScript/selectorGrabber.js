@@ -141,8 +141,6 @@ var grabber = (function defineGrabber() {
                 api.addThisVersion(availablePhpVersions[index], snglObject);
             });
 
-            // TODO: Why?
-            getJSON();
         }
 
         return {
@@ -389,20 +387,6 @@ var grabber = (function defineGrabber() {
         }
     }());
 
-    // TODO: Hanging out because it's dependency for _finder.processReturnedJson
-    function getJSON() {
-        if (!_auth.verifyExtArrNotEmpty()) {
-            _logger.logErr("NO EXTENSIONS SAVED");
-        } else {
-            return JSON.stringify(allPHPExtensions);
-        }
-    }
-
-    // TODO: REFACTOR BEGIN
-    // Functionality -> api
-    // Authentication -> _auth
-    //
-
 
     function addSelected() {
         availablePhpVersions = [];
@@ -410,7 +394,6 @@ var grabber = (function defineGrabber() {
         let passedVersionsRaw = Array.from(arguments);
         _finder.prepareDataToBeSent(passedVersionsRaw);
         let uniqueSelectedVersions = [...new Set(availablePhpVersions)];
-        //:TODO confirm from now on?
         let fireRequestForEachVerExtns = uniqueSelectedVersions.map(singleVersion => {
             return api.sendPostToGetExtentionsForSpecificVer(singleVersion);
         });
@@ -420,43 +403,15 @@ var grabber = (function defineGrabber() {
             _finder.processReturnedJson(results);
         });
 
-
-
-
-        // passedVersions.map(ver => {
-        //     availablePhpVersions.push(String(ver / 10));
-        // });
-        //
-        //
-        // let fireRequestForEachVersionGiven = passedVersions.map(singleVersion => {
-        //     return _sendPostToGetExtentionsForSpecificVer(singleVersion / 10);
-        // });
-        //
-        // Promise.all(fireRequestForEachVersionGiven).then(results => {
-        //     _logger.logInfo(`All requests for selected versions finished`);
-        //     _finder.processReturnedJson(results);
-        // });
-
-        //For lame debugging purposes   [...new Set(ARRAY)] > removes duplicates
         _logger.logInfo(`Passed versions are: ${passedVersionsRaw}`);
 
     }
-
-
-
-
-
-
-    //
-    //
-    // TODO: REFACTOR END
 
     (function displayHelp() {
         window.console.clear();
         _logger.help();
     }());
 
-    // TODO: addAll, addSelected not returned, fix bugs
     return Object.freeze({
         add54: api.add54,
         rm54: api.rm54,
@@ -474,7 +429,7 @@ var grabber = (function defineGrabber() {
         rmCustom: api.rmCustom,
         addAll: api.addAll,
         v: api.reportStoredVersions,
-        getJSON: getJSON,
+        getJSON: api.getJSON,
         clear: api.clear,
         addSelected: addSelected
     });
