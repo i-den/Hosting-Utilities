@@ -94,6 +94,29 @@ var grabber = (function defineGrabber() {
             return undefined;
         }
 
+        function processInteger(int){
+            if (int < 10) {
+                availablePhpVersions.push(int.toFixed(1));
+            } else {
+                availablePhpVersions.push(String(int).split("").join("."));
+            }
+        }
+
+        function processFloat(flt){
+            availablePhpVersions.push(String(flt));
+        }
+
+        function prepareDataToBeSent(arr){
+            arr.map( number => {
+                if(number % 1 === 0){
+                    processInteger(number);
+                }else{
+                    processFloat(number);
+                }
+            });
+            _logger.logInfo(` versions to be used in request are: ${availablePhpVersions}`);
+        }
+
         function findVersIndex(verObj) {
             return allPHPExtensions.findIndex(function findIndCb(currStoredVerObj) {
                 return currStoredVerObj === verObj;
@@ -115,16 +138,15 @@ var grabber = (function defineGrabber() {
 
         function processReturnedJson(arrayOfObjects) {
             arrayOfObjects.map((snglObject, index) => {
-                _addThisVersion(availablePhpVersions[index], snglObject);
+                api.addThisVersion(availablePhpVersions[index], snglObject);
             });
 
-            // TODO: Why?
-            getJSON();
         }
 
         return {
             findVersionAmongSaved: findVersionAmongSaved,
             findVersIndex: findVersIndex,
+            prepareDataToBeSent: prepareDataToBeSent,
             findAvailablePhpVersionsOnThisCpanel: findAvailablePhpVersionsOnThisCpanel,
             processReturnedJson: processReturnedJson
         }
@@ -139,6 +161,7 @@ var grabber = (function defineGrabber() {
         function verifyExtArrNotEmpty() {
             return allPHPExtensions.length > 0;
         }
+
 
         return {
             verifySelectedDomVer: verifySelectedDomVer,
@@ -242,7 +265,7 @@ var grabber = (function defineGrabber() {
             } else {
                 return JSON.stringify(allPHPExtensions);
             }
-        }
+        } //TODO: duplicate?
 
         function _rmVer(ver) {
             var verObj = _finder.findVersionAmongSaved(ver),
@@ -278,6 +301,67 @@ var grabber = (function defineGrabber() {
             return chkdExtns;
         }
 
+        function _sendPostToGetExtentionsForSpecificVer(ver) {
+            return new Promise(function (resolve, reject) {
+                let request = new XMLHttpRequest(),
+                    request_data = {"version": ver, "action": "extlist"};
+
+                request.open("POST", uri); // uri defined in template
+                request.onreadystatechange = function () {
+                    if (request.readyState === 4 && request.status === 200) {
+                        _logger.logInfo(`PhP extensions for ${ver} acquired`);
+                        return resolve(JSON.parse(request.responseText))
+                    }
+                };
+                request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                request.send(encodeFormData(request_data));
+            });
+        }
+
+        function _getVersionExtensionsFromObjectWithExts(singleObject) {
+            let activeExtentionsForSingleVersion = [];
+            singleObject.data.map(object => {
+                if (object.status === 1) {
+                    activeExtentionsForSingleVersion.push(object.title);
+                }
+            });
+
+            return activeExtentionsForSingleVersion;
+        }
+
+        function _addThisVersion(version, objectWithExtentions) {
+            let versionNumber = Number(version.split(".").join(""));
+            if (!_finder.findVersionAmongSaved(versionNumber)) {
+                allPHPExtensions.push({
+                    version: versionNumber,
+                    extensions: api.getVersionExtensionsFromObjectWithExts(objectWithExtentions)
+                });
+                _logger.logInfo(`Saved Extensions for ${version}`);
+            } else {
+                _logger.logErr(`${version} already saved.No changes have been made.`)
+            }
+
+        }
+
+        function addAll() {
+            _finder.findAvailablePhpVersionsOnThisCpanel();
+            _logger.logInfo("If available, php versions below 5.4 are ignored and won't be shown or processed");
+            console.warn(`php vers: ${availablePhpVersions}`);
+            if (!availablePhpVersions || availablePhpVersions.length === 0) {
+                _logger.logErr("Something went wrong, contact this script developers.");
+            }
+
+            var fireRequestForEachVerExtns = availablePhpVersions.map(singleVersion => {
+                return api.sendPostToGetExtentionsForSpecificVer(singleVersion);
+            });
+
+            Promise.all(fireRequestForEachVerExtns).then(results => {
+                _logger.logInfo(`All requests finished`);
+                _finder.processReturnedJson(results);
+            });
+
+        }
+
         return {
             add54: add54,
             rm54: rm54,
@@ -294,33 +378,24 @@ var grabber = (function defineGrabber() {
             addCustom: addCustom,
             rmCustom: rmCustom,
             clear: clear,
-            getJSON: getJSON,
-            reportStoredVersions: reportStoredVersions
+            getJSON: getJSON, //TODO: duplicate with below?
+            addAll: addAll,
+            addThisVersion: _addThisVersion,
+            reportStoredVersions: reportStoredVersions,
+            getVersionExtensionsFromObjectWithExts: _getVersionExtensionsFromObjectWithExts,
+            sendPostToGetExtentionsForSpecificVer: _sendPostToGetExtentionsForSpecificVer
         }
     }());
 
-    // TODO: Hanging out because it's dependency for _finder.processReturnedJson
-    function getJSON() {
-        if (!_auth.verifyExtArrNotEmpty()) {
-            _logger.logErr("NO EXTENSIONS SAVED");
-        } else {
-            return JSON.stringify(allPHPExtensions);
-        }
-    }
 
-    // TODO: REFACTOR BEGIN
-    // Functionality -> api
-    // Authentication -> _auth
-    //
-    function addAll() {
-        _finder.findAvailablePhpVersionsOnThisCpanel();
-        console.warn(`php vers: ${availablePhpVersions}`);
-        if (!availablePhpVersions || availablePhpVersions.length === 0) {
-            _logger.logErr("Something went wrong, contact this script developers.");
-        }
-
-        var fireRequestForEachVerExtns = availablePhpVersions.map(singleVersion => {
-            return _sendPostToGetExtentionsForSpecificVer(singleVersion);
+    function addSelected() {
+        availablePhpVersions = [];
+        //:TODO add checks and helping messages if the arguments are in wrong format
+        let passedVersionsRaw = Array.from(arguments);
+        _finder.prepareDataToBeSent(passedVersionsRaw);
+        let uniqueSelectedVersions = [...new Set(availablePhpVersions)];
+        let fireRequestForEachVerExtns = uniqueSelectedVersions.map(singleVersion => {
+            return api.sendPostToGetExtentionsForSpecificVer(singleVersion);
         });
 
         Promise.all(fireRequestForEachVerExtns).then(results => {
@@ -328,70 +403,15 @@ var grabber = (function defineGrabber() {
             _finder.processReturnedJson(results);
         });
 
+        _logger.logInfo(`Passed versions are: ${passedVersionsRaw}`);
+
     }
-
-    function addSelected(...versions) {
-        //:TODO add checks and helping messages if the arguments are in wrong format
-        var passedVersions = Array.from(arguments);
-        passedVersions.map(ver => {
-            availablePhpVersions.push(String(ver / 10));
-        });
-
-
-        var fireRequestForEachVersionGiven = passedVersions.map(singleVersion => {
-            return _sendPostToGetExtentionsForSpecificVer(singleVersion / 10);
-        });
-
-        Promise.all(fireRequestForEachVersionGiven).then(results => {
-            _logger.logInfo(`All requests for selected versions finished`);
-            _finder.processReturnedJson(results);
-        });
-    }
-
-    function _getVersionExtensionsFromObjectWithExts(singleObject) {
-        let activeExtentionsForSingleVersion = [];
-        singleObject.data.map(object => {
-            if (object.status === 1) {
-                activeExtentionsForSingleVersion.push(object.title);
-            }
-        });
-
-        return activeExtentionsForSingleVersion;
-    }
-
-    function _sendPostToGetExtentionsForSpecificVer(ver) {
-        return new Promise(function (resolve, reject) {
-            let request = new XMLHttpRequest(),
-                request_data = {"version": ver, "action": "extlist"};
-
-            request.open("POST", uri); // uri defined in template
-            request.onreadystatechange = function () {
-                if (request.readyState === 4 && request.status === 200) {
-                    _logger.logInfo(`PhP extensions for ${ver} acquired`);
-                    return resolve(JSON.parse(request.responseText))
-                }
-            };
-            request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-            request.send(encodeFormData(request_data));
-        });
-    }
-
-    function _addThisVersion(version, objectWithExtentions) {
-        allPHPExtensions.push({
-            version: Number(version.split(".").join("")),
-            extensions: _getVersionExtensionsFromObjectWithExts(objectWithExtentions)
-        });
-        _logger.logInfo(`Saved Extensions for ${version}`);
-    }
-    //
-    //
-    // TODO: REFACTOR END
 
     (function displayHelp() {
+        window.console.clear();
         _logger.help();
     }());
 
-    // TODO: addAll, addSelected not returned, fix bugs
     return Object.freeze({
         add54: api.add54,
         rm54: api.rm54,
@@ -407,8 +427,10 @@ var grabber = (function defineGrabber() {
         rm72: api.rm72,
         addCustom: api.addCustom,
         rmCustom: api.rmCustom,
+        addAll: api.addAll,
         v: api.reportStoredVersions,
-        getJSON: getJSON,
-        clear: api.clear
+        getJSON: api.getJSON,
+        clear: api.clear,
+        addSelected: addSelected
     });
 }());
