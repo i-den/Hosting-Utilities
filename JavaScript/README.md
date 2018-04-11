@@ -8,7 +8,7 @@
 <img src="https://camo.githubusercontent.com/2d0f09a0f9d02b5317c8e7f0710de56f92b94ebe/68747470733a2f2f692e696d6775722e636f6d2f6b4c445936764d2e706e67">
 
 ##### 3. Copy / Paste <a href="https://raw.githubusercontent.com/i-den/utilities/master/JavaScript/selectorGrabber.js">Selector Grabber</a>
-<img src="https://i.imgur.com/bE2JQjl.png">
+<img src="https://i.imgur.com/QYzpqSG.png">
 
 ##### 4. Select PHP Version from the Dropdown for each Version that will be Installed
 
