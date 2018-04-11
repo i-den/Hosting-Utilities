@@ -16,9 +16,11 @@
 ```javascript
 grabber.add54()
 grabber.addCustom(54)
+grabber.addSelected(54, 55, 56, 70, 71, 72)
 
 add55() -- add56() -- add70() -- add71() -- add72()
 addCustom(55) -- addCustom(56) -- addCustom(70) -- addCustom(71) -- addCustom(72)
+addSelected(54, 55) -- addSelected(56, 70, 71) -- addSelected(72, 56, 55)
 ```
 <img src="https://camo.githubusercontent.com/096c2ae96088c96d0fd29a00cdc4bd64deffc66e/68747470733a2f2f692e696d6775722e636f6d2f453668386948622e706e67">
 
