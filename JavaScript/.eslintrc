@@ -26,6 +26,8 @@
       "always"
     ],
     // Custom
+    // Todo:
+    "curly": "error",
     "no-console": [
       "off"
     ],
@@ -66,12 +68,30 @@
         "code": 80
       }
     ],
-    // multiline-ternary: https://eslint.org/docs/rules/multiline-ternary
-    // new-cap: https://eslint.org/docs/rules/new-cap
-    // "no-continue": "warn" https://eslint.org/docs/rules/no-continue
+    // multiline-ternary            https://eslint.org/docs/rules/multiline-ternary
+    // new-cap                      https://eslint.org/docs/rules/new-cap
+    // "no-continue" "warn"         https://eslint.org/docs/rules/no-continue
     "no-lonely-if": "error",
     "no-mixed-operators": "error",
     "no-multi-assign": "error",
+    // no-multiple-empty-lines      https://eslint.org/docs/rules/no-multiple-empty-lines
+    // no-negated-condition         https://eslint.org/docs/rules/no-negated-condition
+    // no-nested-ternary            https://eslint.org/docs/rules/no-nested-ternary
+    // no-trailing-spaces           https://eslint.org/docs/rules/no-trailing-spaces
+    // no-unneeded-ternary          https://eslint.org/docs/rules/no-unneeded-ternary
+    "no-whitespace-before-property": "error"
+    // space-before-blocks          https://eslint.org/docs/rules/space-before-blocks
+    // space-before-function-paren  https://eslint.org/docs/rules/space-before-function-paren
+    // space-in-parens              https://eslint.org/docs/rules/space-in-parens
+    // space-infix-ops              https://eslint.org/docs/rules/space-infix-ops
+    // "wrap-regex": "warn"         https://eslint.org/docs/rules/wrap-regex
+
+    // ES6
+    // no-duplicate-imports         https://eslint.org/docs/rules/no-duplicate-imports
+    // prefer-const                 https://eslint.org/docs/rules/prefer-const
+    // prefer-destructuring         https://eslint.org/docs/rules/prefer-destructuring
+    // prefer-template              https://eslint.org/docs/rules/prefer-template
+    // template-curly-spacing       https://eslint.org/docs/rules/template-curly-spacing
     
   }
 }
