@@ -1,36 +1,77 @@
 {
-    "env": {
-        "browser": true,
-        "es6": true
-        //"jquery": true
-    },
-    "extends": "eslint:recommended",
-    "parserOptions": {
-        "sourceType": "module"
-    },
-    "rules": {
-        "indent": [
-            "warn",
-            4
-        ],
-        "linebreak-style": [
-            "warn",
-            "unix"
-        ],
-        "quotes": [
-            "warn",
-            "double"
-        ],
-        "semi": [
-            "warn",
-            "always"
-        ],
-        // Custom
-        "no-console": [
-            "off"
-        ],
-        "no-debugger": "warn",
-        "no-unused-vars": "warn",
-        "no-undef": "warn"
-    }
+  "env": {
+    "browser": true,
+    "es6": true
+    //"jquery": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "rules": {
+    "indent": [
+      "warn",
+      4
+    ],
+    "linebreak-style": [
+      "warn",
+      "unix"
+    ],
+    "quotes": [
+      "warn",
+      "double"
+    ],
+    "semi": [
+      "warn",
+      "always"
+    ],
+    // Custom
+    "no-console": [
+      "off"
+    ],
+    "no-debugger": "warn",
+    "no-unused-vars": "warn",
+    "no-undef": "warn",
+    // TODO: Soft Errors
+    "vars-on-top": "warn",
+    "wrap-iife": "warn",
+    "no-catch-shadow": "error",
+    "no-label-var": "error",
+    "no-shadow": "warn",
+    "no-use-before-define": "warn",
+    // TODO: Style
+    "brace-style": [
+      "error",
+      "1tbs"
+    ],
+    "comma-dangle": [
+      "warn",
+      "never"
+    ],
+    "func-call-spacing": [
+      "error",
+      "never"
+    ],
+    "func-names": [
+      "warn",
+      "always"
+    ],
+    "lines-between-class-members": [
+      "warn",
+      "always"
+    ],
+    "max-len": [
+      "warn",
+      {
+        "code": 80
+      }
+    ],
+    // multiline-ternary: https://eslint.org/docs/rules/multiline-ternary
+    // new-cap: https://eslint.org/docs/rules/new-cap
+    // "no-continue": "warn" https://eslint.org/docs/rules/no-continue
+    "no-lonely-if": "error",
+    "no-mixed-operators": "error",
+    "no-multi-assign": "error",
+    
+  }
 }
