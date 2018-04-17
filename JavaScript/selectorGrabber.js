@@ -241,9 +241,9 @@ var grabber = (function defineGrabber() {
         function rmCustom(ver) {
             if (!/^[\d]{2}$/.test(ver)) {
                 _logger.logErr("Invalid Version, Enter a Number Like: 71, 72, 73, 74")
+            } else {
+                _rmVer(ver);
             }
-
-            _rmVer(ver);
         }
 
         function reportStoredVersions() {
