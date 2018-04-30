@@ -1,0 +1,65 @@
+# Environment
+env:
+  browser: true
+  es6: true
+  jquery: true
+  # node: true
+
+extends: eslint:recommended
+
+parserOptions:
+  sourceType: module
+  # ecmaVersion: 2017
+  # ecmaFeatures:
+      # jsx: true
+
+# Default Setup Rules
+rules:
+  indent:
+  - warn
+  - 4
+  linebreak-style:
+  - warn
+  - unix
+  # - windows
+  quotes:
+  - warn
+  - double
+  semi:
+  - warn
+  - always
+# Custom Added Rules
+  curly: error
+  no-console:
+  - 'off'
+  no-debugger: warn
+  no-unused-vars: warn
+  no-undef: warn
+  # Soft Errors
+  no-catch-shadow: error
+  no-label-var: warn
+  no-shadow: warn
+  # Style Pref
+  brace-style:
+  - error
+  - 1tbs
+  func-call-spacing:
+  - error
+  - never
+  func-names:
+  - warn
+  - always
+  lines-between-class-members:
+  - warn
+  - always
+  new-cap:
+  - error
+  - newIsCap: true
+  no-lonely-if: warn
+  no-mixed-operators: error
+  no-multi-assign: error
+  no-nested-ternary: error
+  no-trailing-spaces: warn
+  no-whitespace-before-property: error
+  space-infix-ops: error
+  wrap-regex: warn
