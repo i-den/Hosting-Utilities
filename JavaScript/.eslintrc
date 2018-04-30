@@ -1,8 +1,9 @@
 {
   "env": {
     "browser": true,
-    "es6": true
-    //"jquery": true
+    "es6": true,
+    "jquery": true
+    // "node": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {
@@ -26,7 +27,6 @@
       "always"
     ],
     // Custom
-    // Todo:
     "curly": "error",
     "no-console": [
       "off"
@@ -34,21 +34,16 @@
     "no-debugger": "warn",
     "no-unused-vars": "warn",
     "no-undef": "warn",
-    // TODO: Soft Errors
-    "vars-on-top": "warn",
-    "wrap-iife": "warn",
+    // Soft Errors
+    // "vars-on-top": "warn",
+    // "wrap-iife": "warn",
     "no-catch-shadow": "error",
-    "no-label-var": "error",
+    "no-label-var": "warn",
     "no-shadow": "warn",
-    "no-use-before-define": "warn",
     // TODO: Style
     "brace-style": [
       "error",
       "1tbs"
-    ],
-    "comma-dangle": [
-      "warn",
-      "never"
     ],
     "func-call-spacing": [
       "error",
@@ -62,36 +57,19 @@
       "warn",
       "always"
     ],
-    "max-len": [
-      "warn",
+    "new-cap": [
+      "error",
       {
-        "code": 80
+        "newIsCap": true
       }
     ],
-    // multiline-ternary            https://eslint.org/docs/rules/multiline-ternary
-    // new-cap                      https://eslint.org/docs/rules/new-cap
-    // "no-continue" "warn"         https://eslint.org/docs/rules/no-continue
-    "no-lonely-if": "error",
+    "no-lonely-if": "warn",
     "no-mixed-operators": "error",
     "no-multi-assign": "error",
-    // no-multiple-empty-lines      https://eslint.org/docs/rules/no-multiple-empty-lines
-    // no-negated-condition         https://eslint.org/docs/rules/no-negated-condition
-    // no-nested-ternary            https://eslint.org/docs/rules/no-nested-ternary
-    // no-trailing-spaces           https://eslint.org/docs/rules/no-trailing-spaces
-    // no-unneeded-ternary          https://eslint.org/docs/rules/no-unneeded-ternary
-    "no-whitespace-before-property": "error"
-    // space-before-blocks          https://eslint.org/docs/rules/space-before-blocks
-    // space-before-function-paren  https://eslint.org/docs/rules/space-before-function-paren
-    // space-in-parens              https://eslint.org/docs/rules/space-in-parens
-    // space-infix-ops              https://eslint.org/docs/rules/space-infix-ops
-    // "wrap-regex": "warn"         https://eslint.org/docs/rules/wrap-regex
-
-    // ES6
-    // no-duplicate-imports         https://eslint.org/docs/rules/no-duplicate-imports
-    // prefer-const                 https://eslint.org/docs/rules/prefer-const
-    // prefer-destructuring         https://eslint.org/docs/rules/prefer-destructuring
-    // prefer-template              https://eslint.org/docs/rules/prefer-template
-    // template-curly-spacing       https://eslint.org/docs/rules/template-curly-spacing
-    
+    "no-nested-ternary": "error",
+    "no-trailing-spaces": "warn",
+    "no-whitespace-before-property": "error",
+    "space-infix-ops": "error",
+    "wrap-regex": "warn"
   }
 }
