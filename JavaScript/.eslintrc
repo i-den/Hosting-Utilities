@@ -35,12 +35,10 @@
     "no-unused-vars": "warn",
     "no-undef": "warn",
     // Soft Errors
-    // "vars-on-top": "warn",
-    // "wrap-iife": "warn",
     "no-catch-shadow": "error",
     "no-label-var": "warn",
     "no-shadow": "warn",
-    // TODO: Style
+    // Style
     "brace-style": [
       "error",
       "1tbs"
