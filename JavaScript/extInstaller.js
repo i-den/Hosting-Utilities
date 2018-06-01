@@ -422,7 +422,7 @@ var installer = (function defineInstaller() {
     }());
 
     function install(phpExtJSON) {
-        if (document.getElementById("pageSize_select").selectedOptions[0].text !== "All") {
+        if (document.getElementById("pageSize_extensions_select").selectedOptions[0].text !== "All") {
             _logger.logErr("!! Select ALL from Page Size to View Everything !!");
             return;
         }
