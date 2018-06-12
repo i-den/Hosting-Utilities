@@ -152,8 +152,8 @@ let CronWatcher = (function defWatcher() {
                 fs.writeFile(`${this.dir}/Methods`, "", "utf8");
             }
 
-            if (!fs.existsSync(`${this.dir}/Login`)) {
-                fs.writeFile(`${this.dir}/Login`, "", "utf8");
+            if (!fs.existsSync(`${this.dir}/login`)) {
+                fs.writeFile(`${this.dir}/login`, "", "utf8");
             }
 
             this.getLogFile = `${this.dir}/GET`;
@@ -242,15 +242,17 @@ let CronWatcher = (function defWatcher() {
             _logger.manageLogEntry(_dirManager.otherMethodsLog, _watcher.methods);
             _logger.manageLogEntry(_dirManager.loginLogFile, _watcher.adminLogs);
 
-            let mailMsg = [];
+            if (Object.keys(_logger.createdFiles).length > 0) {
+                let mailMsg = [];
 
-            Object.keys(_logger.createdFiles).forEach(function accMailMsg(key) {
-                let currMsg = key + "\n";
-                currMsg += _logger.createdFiles[key];
-                mailMsg.push(currMsg);
-            });
+                Object.keys(_logger.createdFiles).forEach(function accMailMsg(key) {
+                    let currMsg = key + "\n";
+                    currMsg += _logger.createdFiles[key];
+                    mailMsg.push(currMsg);
+                });
 
-            LogMailer.sendLogs(mailMsg.join("\n\n"));
+                LogMailer.sendLogs(mailMsg.join("\n\n"));
+            }
         }
     };
 
