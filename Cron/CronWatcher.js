@@ -55,8 +55,8 @@ let CronWatcher = (function defWatcher() {
             let year = date.getFullYear();
             let month = ("0" + (date.getMonth() + 1)).slice(-2);
             let day = ("0" + date.getDate()).slice(-2);
-            let lastHour = ("0" + (date.getHours() - 1)).slice(-2);
-            let currHour = ("0" + date.getHours()).slice(-2);
+            let lastHour = ("0" + date.getHours()).slice(-2);
+            let currHour = ("0" + (date.getHours() + 1)).slice(-2);
 
             return [year, month, day, lastHour, currHour];
         },
