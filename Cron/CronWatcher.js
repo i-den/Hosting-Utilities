@@ -7,7 +7,8 @@ let CronWatcher = (function defWatcher() {
     var homeDir,
         accessLogFile,
         cronLogDir,
-        hoursOfLastLogs;
+        hoursOfLastLogs,
+        domain;
 
     let _watcher = {
         postLogs: [],
@@ -84,7 +85,7 @@ let CronWatcher = (function defWatcher() {
         },
 
         createLog: function createLog(ip, date, method, url) {
-            let logsIP = (ip + " ".repeat(8)).slice(0, 15);
+            let logsIP = (ip + " ".repeat(32)).slice(0, 39);
             let logsDate = `${("0" + date.getDate()).slice(-2)}`;
             let logsMonth = (`${(this.monthsVerb[("0" + (date.getMonth() + 1)).slice(-2)])}` + " ".repeat(6)).slice(0, 9);
             let logsHour = ("0" + date.getHours()).slice(-2);
@@ -152,15 +153,17 @@ let CronWatcher = (function defWatcher() {
                 fs.writeFile(`${this.dir}/Methods`, "", "utf8");
             }
 
-            if (!fs.existsSync(`${this.dir}/login`)) {
-                fs.writeFile(`${this.dir}/login`, "", "utf8");
+            if (!fs.existsSync(`${this.dir}/Login`)) {
+                fs.writeFile(`${this.dir}/Login`, "", "utf8");
             }
 
             this.getLogFile = `${this.dir}/GET`;
             this.postLogFile = `${this.dir}/POST`;
             this.modifiedFilesLog = `${this.dir}/Modified`;
             this.otherMethodsLog = `${this.dir}/Methods`;
-            this.loginLogFile = `${this.dir}/login`;
+            this.loginLogFile = `${this.dir}/Login`;
+
+            LogMailer.setSmtpSubject(`Node Logs ${day}/${month}/${year} ${lastHour} - ${currHour} ${domain}`);
         }
     };
 
@@ -172,7 +175,18 @@ let CronWatcher = (function defWatcher() {
                 let key = logFile.slice(logFile.lastIndexOf("/") + 1);
                 let val = logsArr.join("\n");
 
-                this.createdFiles[key] = val;
+                let uniqIPs = [];
+                logsArr.forEach(function gatherUniqIPs(logRow) {
+                    let ip = logRow.split(" ")[0];
+                    if (!uniqIPs.includes(ip)) {
+                        uniqIPs.push(ip);
+                    }
+                });
+
+                this.createdFiles[key] = {
+                    logs: val,
+                    uniqIPs: uniqIPs
+                };
 
                 fs.writeFileSync(logFile, val, "utf8");
             } else {
@@ -202,6 +216,10 @@ let CronWatcher = (function defWatcher() {
 
         setHoursOfLastLog: function setHoursOfLastLog(hours) {
             hoursOfLastLogs = hours;
+        },
+
+        setDomain: function setDomain(inpDomain) {
+            domain = inpDomain;
         },
 
         log: function log() {
@@ -245,9 +263,16 @@ let CronWatcher = (function defWatcher() {
             if (Object.keys(_logger.createdFiles).length > 0) {
                 let mailMsg = [];
 
-                Object.keys(_logger.createdFiles).forEach(function accMailMsg(key) {
+                Object.keys(_logger.createdFiles).forEach(function accumMailMsg(key) {
                     let currMsg = key + "\n";
-                    currMsg += _logger.createdFiles[key];
+
+                    currMsg += "Unique IPs:\n";
+                    currMsg += _logger.createdFiles[key].uniqIPs.join("\n");
+                    currMsg += "\n\nRequests:\n";
+                    currMsg += _logger.createdFiles[key].logs;
+                    currMsg += "\n\n";
+                    currMsg += "=".repeat(212);
+
                     mailMsg.push(currMsg);
                 });
 
