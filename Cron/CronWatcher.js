@@ -8,7 +8,8 @@ let CronWatcher = (function defWatcher() {
         accessLogFile,
         cronLogDir,
         hoursOfLastLogs,
-        domain;
+        domain,
+        mailMsg = "";
 
     let _watcher = {
         postLogs: [],
@@ -86,13 +87,18 @@ let CronWatcher = (function defWatcher() {
 
         createLog: function createLog(ip, date, method, url) {
             let logsIP = (ip + " ".repeat(32)).slice(0, 39);
-            let logsDate = `${("0" + date.getDate()).slice(-2)}`;
-            let logsMonth = (`${(this.monthsVerb[("0" + (date.getMonth() + 1)).slice(-2)])}` + " ".repeat(6)).slice(0, 9);
+
+            // let logsDate = `${("0" + date.getDate()).slice(-2)}`;
+            // let logsMonth = (`${(this.monthsVerb[("0" + (date.getMonth() + 1)).slice(-2)])}` + " ".repeat(6)).slice(0, 9);
+
             let logsHour = ("0" + date.getHours()).slice(-2);
             let logsMin = ("0" + date.getMinutes()).slice(-2);
             let logsSec = ("0" + date.getSeconds()).slice(-2);
+
             let logsMethod = (method + " ".repeat(4)).slice(0, 7);
-            return `${logsIP}  ${logsDate}/${logsMonth}  ${logsHour}:${logsMin}:${logsSec}  ${logsMethod}  ${url}`;
+            // return `${logsIP}  ${logsDate}/${logsMonth}  ${logsHour}:${logsMin}:${logsSec}  ${logsMethod}  ${url}`;
+
+            return `${logsIP}  ${logsHour}:${logsMin}:${logsSec}  ${logsMethod}  ${url}`;
         }
     };
 
@@ -168,30 +174,66 @@ let CronWatcher = (function defWatcher() {
     };
 
     let _logger = {
-        createdFiles: {},
-
         manageLogEntry: function manageLogEntry(logFile, logsArr) {
             if (logsArr.length > 0) {
-                let key = logFile.slice(logFile.lastIndexOf("/") + 1);
-                let val = logsArr.join("\n");
+                let request = logFile.slice(logFile.lastIndexOf("/") + 1);
 
-                let uniqIPs = [];
-                logsArr.forEach(function gatherUniqIPs(logRow) {
-                    let ip = logRow.split(" ")[0];
-                    if (!uniqIPs.includes(ip)) {
-                        uniqIPs.push(ip);
-                    }
-                });
-
-                this.createdFiles[key] = {
-                    logs: val,
-                    uniqIPs: uniqIPs
+                let methodInfo = {
+                    ipInfo: {},
+                    urls: {}
                 };
 
-                fs.writeFileSync(logFile, val, "utf8");
+                logsArr.forEach(function gatherMethodInfo(logRow) {
+                    let [ip, time, method, url] = logRow.split(/\s+/);
+
+                    if (!methodInfo.ipInfo[ip]) {
+                        methodInfo.ipInfo[ip] = [];
+                    }
+
+                    if (!methodInfo.urls[url]) {
+                        methodInfo.urls[url] = 0;
+                    }
+
+                    methodInfo.ipInfo[ip].push(`${time}  ${url}`);
+                    methodInfo.urls[url]++;
+                });
+
+                let logInfo = this.accumulateMailMsg(request, methodInfo);
+                fs.writeFileSync(logFile, logInfo, "utf8");
             } else {
                 fs.unlinkSync(logFile);
             }
+        },
+
+        accumulateMailMsg: function accumulateMailMsg(request, methodInfo) {
+            let separator = "=".repeat(212);
+            let currMsg = separator + "\n";
+            currMsg += `|||>>> All ${request} logs:\n`;
+            currMsg += separator + "\n";
+
+            let uniqIPInfo = "";
+            let ipLogsMsg = "";
+
+            Object.keys(methodInfo.ipInfo).forEach(function storeIPInfo(currIP) {
+                let currIPLogs = methodInfo.ipInfo[currIP];
+
+                uniqIPInfo += `Reqs: ${("      " + currIPLogs.length).slice(-6)} | ${currIP}\n`;
+
+                ipLogsMsg += `## ${currIP} \n`;
+                // TODO: Get currIP rDNS / GeoIP info
+
+                ipLogsMsg += currIPLogs.join("\n");
+                ipLogsMsg += "\n\n";
+            });
+
+            currMsg += "Unique IP addresses:\n";
+            currMsg += uniqIPInfo;
+            currMsg += "\n";
+
+            currMsg += ipLogsMsg;
+
+            mailMsg += currMsg + "\n";
+            return currMsg;
         }
     };
 
@@ -249,7 +291,7 @@ let CronWatcher = (function defWatcher() {
                             break;
                     }
 
-                    if (/wp-login|wp-admin/.test(url)) { // put in admin
+                    if (/wp-login\.php/.test(url)) { // put in admin
                         _watcher.adminLogs.push(currLog);
                     }
                 }
@@ -260,24 +302,7 @@ let CronWatcher = (function defWatcher() {
             _logger.manageLogEntry(_dirManager.otherMethodsLog, _watcher.methods);
             _logger.manageLogEntry(_dirManager.loginLogFile, _watcher.adminLogs);
 
-            if (Object.keys(_logger.createdFiles).length > 0) {
-                let mailMsg = [];
-
-                Object.keys(_logger.createdFiles).forEach(function accumMailMsg(key) {
-                    let currMsg = key + "\n";
-
-                    currMsg += "Unique IPs:\n";
-                    currMsg += _logger.createdFiles[key].uniqIPs.join("\n");
-                    currMsg += "\n\nRequests:\n";
-                    currMsg += _logger.createdFiles[key].logs;
-                    currMsg += "\n\n";
-                    currMsg += "=".repeat(212);
-
-                    mailMsg.push(currMsg);
-                });
-
-                LogMailer.sendLogs(mailMsg.join("\n\n"));
-            }
+            LogMailer.sendLogs(mailMsg);
         }
     };
 
