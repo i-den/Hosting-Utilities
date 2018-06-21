@@ -2,6 +2,7 @@ let CronWatcher = (function defWatcher() {
     "use strict";
     const fs = require("fs");
     const {execSync} = require("child_process");
+    const dns = require("dns");
     const {LogMailer} = require("./mailer");
 
     var homeDir,
@@ -174,6 +175,8 @@ let CronWatcher = (function defWatcher() {
     };
 
     let _logger = {
+        separator: "=".repeat(212),
+
         manageLogEntry: function manageLogEntry(logFile, logsArr) {
             if (logsArr.length > 0) {
                 let request = logFile.slice(logFile.lastIndexOf("/") + 1);
@@ -206,10 +209,9 @@ let CronWatcher = (function defWatcher() {
         },
 
         accumulateMailMsg: function accumulateMailMsg(request, methodInfo) {
-            let separator = "=".repeat(212);
-            let currMsg = separator + "\n";
+            let currMsg = this.separator + "\n";
             currMsg += `|||>>> All ${request} logs:\n`;
-            currMsg += separator + "\n";
+            currMsg += this.separator + "\n";
 
             let uniqIPInfo = "";
             let ipLogsMsg = "";
@@ -234,6 +236,13 @@ let CronWatcher = (function defWatcher() {
 
             mailMsg += currMsg + "\n";
             return currMsg;
+        },
+
+        logModifiedFiles: function logModifiedFiles(modFiles) {
+            mailMsg += this.separator + "\n";
+            mailMsg += "|||>>> All Modified files:\n";
+            mailMsg += this.separator + "\n";
+            mailMsg += modFiles + "\n\n";
         }
     };
 
@@ -270,6 +279,7 @@ let CronWatcher = (function defWatcher() {
             // Log Modified Files
             let modifiedFiles = execSync("find ~/ -type f -mmin -60").toString();
             fs.writeFileSync(_dirManager.modifiedFilesLog, modifiedFiles, "utf8");
+            _logger.logModifiedFiles(modifiedFiles);
 
             // Log Access Logs
             let logs = _formatter.getRawLogs();
@@ -297,12 +307,14 @@ let CronWatcher = (function defWatcher() {
                 }
             });
 
+            _logger.manageLogEntry(_dirManager.loginLogFile, _watcher.adminLogs);
             _logger.manageLogEntry(_dirManager.postLogFile, _watcher.postLogs);
             _logger.manageLogEntry(_dirManager.getLogFile, _watcher.getLogs);
             _logger.manageLogEntry(_dirManager.otherMethodsLog, _watcher.methods);
-            _logger.manageLogEntry(_dirManager.loginLogFile, _watcher.adminLogs);
 
-            LogMailer.sendLogs(mailMsg);
+            if (mailMsg.length > 0) {
+                LogMailer.sendLogs(mailMsg);
+            }
         }
     };
 
