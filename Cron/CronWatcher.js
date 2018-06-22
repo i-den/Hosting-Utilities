@@ -2,7 +2,6 @@ let CronWatcher = (function defWatcher() {
     "use strict";
     const fs = require("fs");
     const {execSync} = require("child_process");
-    const dns = require("dns");
     const {LogMailer} = require("./mailer");
 
     var homeDir,
@@ -209,6 +208,7 @@ let CronWatcher = (function defWatcher() {
         },
 
         accumulateMailMsg: function accumulateMailMsg(request, methodInfo) {
+            let smallStep = "-".repeat(106);
             let currMsg = this.separator + "\n";
             currMsg += `|||>>> All ${request} logs:\n`;
             currMsg += this.separator + "\n";
@@ -219,18 +219,32 @@ let CronWatcher = (function defWatcher() {
             Object.keys(methodInfo.ipInfo).forEach(function storeIPInfo(currIP) {
                 let currIPLogs = methodInfo.ipInfo[currIP];
 
-                uniqIPInfo += `Reqs: ${("      " + currIPLogs.length).slice(-6)} | ${currIP}\n`;
+                uniqIPInfo += `Requests: ${("      " + currIPLogs.length).slice(-6)} | ${currIP}\n`;
 
-                ipLogsMsg += `## ${currIP} \n`;
-                // TODO: Get currIP rDNS / GeoIP info
+                ipLogsMsg += smallStep + "\n";
+                ipLogsMsg += `${currIP}\n`;
+                ipLogsMsg += (function getIpInfo() {
+                    let ipInfo = JSON.parse(execSync(`curl ipinfo.io/${currIP}`).toString());
+                    let ipInfoMsg = "";
 
+                    Object.keys(ipInfo).forEach(function accInfoMsg(ipInfoKey) {
+                        if (!["ip", "loc", "postal"].includes(ipInfoKey)) {
+                            ipInfoMsg += `${(" ".repeat(8) + ipInfoKey.toUpperCase()).slice(-8)}: ${ipInfo[ipInfoKey] || "N/A"}\n`;
+                        }
+                    });
+
+                    return ipInfoMsg;
+                }());
+
+                ipLogsMsg += "\nRequests:\n";
                 ipLogsMsg += currIPLogs.join("\n");
-                ipLogsMsg += "\n\n";
+                ipLogsMsg += "\n" + smallStep + "\n";
             });
 
+            currMsg += smallStep + "\n";
             currMsg += "Unique IP addresses:\n";
             currMsg += uniqIPInfo;
-            currMsg += "\n";
+            currMsg += smallStep + "\n\n";
 
             let mostFreqURL = (function getMostFreqURL() {
                 let url = Object.keys(methodInfo.urls).sort(function sortURLs(url1, url2) {
@@ -243,8 +257,10 @@ let CronWatcher = (function defWatcher() {
                 };
             }());
 
+            currMsg += smallStep + "\n";
             currMsg += "Most Frequent URL accessed:\n";
-            currMsg += `${mostFreqURL.reqs} ${mostFreqURL.url}\n\n`;
+            currMsg += `${mostFreqURL.reqs} ${mostFreqURL.url}\n`;
+            currMsg += smallStep + "\n\n";
 
             currMsg += ipLogsMsg;
 
