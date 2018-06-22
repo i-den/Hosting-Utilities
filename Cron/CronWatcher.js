@@ -232,6 +232,20 @@ let CronWatcher = (function defWatcher() {
             currMsg += uniqIPInfo;
             currMsg += "\n";
 
+            let mostFreqURL = (function getMostFreqURL() {
+                let url = Object.keys(methodInfo.urls).sort(function sortURLs(url1, url2) {
+                    return methodInfo.urls[url2] - methodInfo.urls[url1];
+                })[0];
+
+                return {
+                    url: url,
+                    reqs: methodInfo.urls[url]
+                };
+            }());
+
+            currMsg += "Most Frequent URL accessed:\n";
+            currMsg += `${mostFreqURL.reqs} ${mostFreqURL.url}\n\n`;
+
             currMsg += ipLogsMsg;
 
             mailMsg += currMsg + "\n";
