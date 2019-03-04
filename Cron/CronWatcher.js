@@ -9,7 +9,8 @@ let CronWatcher = (function defWatcher() {
         cronLogDir,
         hoursOfLastLogs,
         domain,
-        mailMsg = "";
+        mailMsg = "",
+        intermittentSmtpSubj;
 
     let _watcher = {
         postLogs: [],
@@ -169,7 +170,7 @@ let CronWatcher = (function defWatcher() {
             this.otherMethodsLog = `${this.dir}/Methods`;
             this.loginLogFile = `${this.dir}/Login`;
 
-            LogMailer.setSmtpSubject(`Node Logs ${day}/${month}/${year} ${lastHour} - ${currHour} ${domain}`);
+            intermittentSmtpSubj = `Node Logs ${day}/${month}/${year} ${lastHour} - ${currHour} ${domain} ||| `;
         }
     };
 
@@ -212,6 +213,8 @@ let CronWatcher = (function defWatcher() {
             let currMsg = this.separator + "\n";
             currMsg += `|||>>> All ${request} logs:\n`;
             currMsg += this.separator + "\n";
+
+            intermittentSmtpSubj += `${request} `;
 
             let uniqIPInfo = "";
             let ipLogsMsg = "";
@@ -342,6 +345,8 @@ let CronWatcher = (function defWatcher() {
             _logger.manageLogEntry(_dirManager.getLogFile, _watcher.getLogs);
             _logger.manageLogEntry(_dirManager.otherMethodsLog, _watcher.methods);
 
+            LogMailer.setSmtpSubject(intermittentSmtpSubj);
+            console.log(intermittentSmtpSubj);
             if (mailMsg.length > 0) {
                 LogMailer.sendLogs(mailMsg);
             }
