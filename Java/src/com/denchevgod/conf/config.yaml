@@ -1,0 +1,35 @@
+# /*
+# | --------------------------------------------------------------------------------------------------------
+# | Filter scan files
+# | --------------------------------------------------------------------------------------------------------
+# /*
+# | Ignores all scanned files that being with the following string
+# | Example:
+# | beginsWith:
+# |   - /tmp
+# | will ignore all files that begin with /tmp, like "/tmp/analog/" and "/tmp/cache/"
+beginsWith:
+  - /.cagefs/
+  - /quarantine_clamavconnector/
+# | contains:
+# |   - /updraft
+# | ignores "/wp-content/plugins/updraft-plus/backups/*"
+contains:
+  -
+# | endsWith:
+# |   - .tar.gz
+# | ignores "/public_html/backup.tar.gz
+endsWith:
+  - .apk
+  - .wpress
+  - .gz
+  - .tgz
+  - .tar.gz
+  - .zip
+  - .exe
+############################################################################################################
+# /*
+# | --------------------------------------------------------------------------------------------------------
+# |
+# | --------------------------------------------------------------------------------------------------------
+# /*
