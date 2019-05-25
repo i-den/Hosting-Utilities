@@ -11,6 +11,7 @@
 beginsWith:
   - /.cagefs/
   - /quarantine_clamavconnector/
+  - /tmp/analog/
 # | contains:
 # |   - /updraft
 # | ignores "/wp-content/plugins/updraft-plus/backups/*"
@@ -42,16 +43,10 @@ outputDirectory: scanTickets
 usePastebin: on
 # | The max files that will be printed on text. If the files are more than ${maxScanFiles} a Pastebin URL will be created:
 # | Keep it high to avoid daily usage limit
-maxScanFiles: 
+maxScanFiles: 40
 # | This is the API Dev Key, it's obtained by logging in the Pastebin account and opening https://pastebin.com/api#1
 apiDevKey: 
 # | This is the API Dev Key, it's obtained by logging in the Pastebin account and opening https://pastebin.com/api#1
 apiUserKey: 
 expiry: 6M
 ############################################################################################################
-
-
-
-
-
-

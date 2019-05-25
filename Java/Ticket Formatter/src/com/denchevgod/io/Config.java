@@ -29,7 +29,7 @@ public class Config {
 
     @SuppressWarnings("unchecked")
     public ArrayList<String> getProhibitedWords(String words) {
-        return (ArrayList<String>) configMap.get("words");
+        return (ArrayList<String>) configMap.get(words);
     }
 
     public Object getConf(String confName) {
