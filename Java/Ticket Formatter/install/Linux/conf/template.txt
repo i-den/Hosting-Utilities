@@ -1,0 +1,29 @@
+Hello,
+
+I am writing this to inform you that we've detected a vast amount of infected files in your cPanel account with username ##INFECTED_USER_NAME##.
+
+We have run a malware scan and the results are listed below
+
+```
+##INFECTED_USER_ALL_FILES##
+```
+
+You should carefully examine those files and how they interact with your installations. Most of them contain malicious (also known as obfuscated) code, giving third parties (hackers) access to your account's resources which they use for illegal activities such as:
+
+-- Mass distribution of illegal spam
+-- DDoS attacks from your account
+-- Phishing
+
+In addition to this, the third parties also have access to your installations' data which is a major security issue for any personal information that you might store.
+
+That is why is crucial for you to go through all of those files and make sure that they're clean. As this is a major issue for the server's shared usage we ask for your assistance in resolving this issue as fast as possible.
+
+I would strongly advise that in addition to cleaning your cPanel account's files that you run a virus scanner locally, on your computer and make sure it's not infected. After that a good practice is to change all of your hosting account's passwords:
+
+-- Your cPanel account's password
+-- Your email account's passwords
+-- Your FTP account's password
+
+You should also read our article on the matter from https://www.webhostface.com/kb/knowledgebase/cleaning-up-infected-websites/
+
+We're expecting to hear your state and what actions have been taken within the next 24 hours. Otherwise, you risk having your account suspended until further action is taken.
