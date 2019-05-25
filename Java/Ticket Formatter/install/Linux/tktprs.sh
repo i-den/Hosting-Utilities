@@ -1,2 +1,2 @@
-#!/bin/bash
-java -jar /path/to/TicketParser.jar
+#! /bin/bash
+java -jar TickerParser.jar
