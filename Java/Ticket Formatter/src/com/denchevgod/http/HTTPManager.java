@@ -2,6 +2,7 @@ package com.denchevgod.http;
 
 import com.denchevgod.io.Config;
 import com.denchevgod.malware.InfectedUser;
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,24 +15,25 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class HTTPManager {
 
-    public String postScanToPastebin(InfectedUser infectedUser) throws IOException {
-        final URL url = new URL("https://pastebin.com/api/api_post.php");
+    public String postScanToPasteEE(InfectedUser infectedUser) throws IOException {
+        final URL url = new URL("https://api.paste.ee/v1/pastes");
         HttpURLConnection http = (HttpURLConnection) url.openConnection();
 
         http.setRequestMethod("POST");
         http.setDoOutput(true);
 
         Map<String, String> arguments = new HashMap<>();
-        arguments.put("api_option", "paste");
-        arguments.put("api_dev_key", (String) Config.getInstance().getConf("apiDevKey"));
-        arguments.put("api_paste_name", "Scan - " + infectedUser.getcPanelUsername());
-        arguments.put("api_paste_expire_date", (String) Config.getInstance().getConf("expiry"));
-        arguments.put("api_paste_code", infectedUser.getMalwareFiles());
-        arguments.put("api_paste_private", "0");
-        arguments.put("api_user_key", (String) Config.getInstance().getConf("apiUserKey"));
+        arguments.put("description", "A list of infected files");
+        arguments.put("key", (String) Config.getInstance().getConf("apiDevKey"));
+        arguments.put("sections[0][name]", "Malware Scan - " + infectedUser.getcPanelUsername());
+        arguments.put("sections[0][contents]", infectedUser.getMalwareFiles());
+        arguments.put("sections[0][syntax]", "text");
+        arguments.put("encrypted", "true");
 
         StringJoiner sj = new StringJoiner("&");
         for (Map.Entry<String, String> entry : arguments.entrySet())
@@ -48,7 +50,13 @@ public class HTTPManager {
         }
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(http.getInputStream()))) {
-            return reader.readLine();
+            String responseJSON = reader.readLine();
+            return new Gson().fromJson(responseJSON, JSONResponse.class).link;
         }
+    }
+
+    class JSONResponse {
+        String id;
+        String link;
     }
 }

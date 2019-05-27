@@ -37,7 +37,6 @@ public class OutputManager {
                     String.format("%s%s%s-ticket.txt", outputFullDirectory, File.separator, infectedUser.getcPanelUsername())
             ));
             currFileToWrite.write(template);
-            System.out.println(infectedUser.getcPanelUsername() + " ticket created");
             currFileToWrite.close();
         }
         peeka4oo();
@@ -49,6 +48,7 @@ public class OutputManager {
         if ((boolean) Config.getInstance().getConf("usePastebin")
                 && infectedUser.malwareFilesAmt() > (int) Config.getInstance().getConf("maxScanFiles")) {
             replacedTemplate = replacedTemplate.replace("##INFECTED_USER_ALL_FILES##", getPastebinURL(infectedUser));
+            System.out.println("Pastebin - " + infectedUser.getcPanelUsername());
         } else {
             replacedTemplate = replacedTemplate.replace("##INFECTED_USER_ALL_FILES##", infectedUser.getMalwareFiles());
         }
@@ -57,7 +57,7 @@ public class OutputManager {
 
     private String getPastebinURL(InfectedUser infectedUser) throws IOException {
         HTTPManager httpManager = new HTTPManager();
-        return httpManager.postScanToPastebin(infectedUser);
+        return httpManager.postScanToPasteEE(infectedUser);
     }
 
     private void peeka4oo() {
