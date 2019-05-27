@@ -34,11 +34,7 @@ endsWith:
 # | --------------------------------------------------------------------------------------------------------
 # /*
 outputDirectory: scanTickets
-# /*
-# | --------------------------------------------------------------------------------------------------------
-# | Wether it should use /home/user/path/to/infected/file or /path/to/infected/file
-# | --------------------------------------------------------------------------------------------------------
-# /*
+
 useFullPath: yes
 ############################################################################################################
 # /*
@@ -49,7 +45,7 @@ useFullPath: yes
 usePastebin: on
 # | The max files that will be printed on text. If the files are more than ${maxScanFiles} a Pastebin URL will be created:
 # | Keep it high to avoid daily usage limit
-maxScanFiles: 10
-# | This is the API Dev Key
-apiDevKey: ENTER_DEV_KEY_HERE
+maxScanFiles: 30
+# | This is the API Dev Key, it's obtained by logging in the Pastebin account and opening https://pastebin.com/api#1
+apiDevKey: 
 ############################################################################################################
