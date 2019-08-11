@@ -16,27 +16,6 @@ import java.util.Set;
 
 public class OutputManager {
 
-    private static class OutputNotifier {
-        static List<String> ticketsNotificationsWithPasteBin = new ArrayList<>();
-        static List<String> ticketsNotificationsWithPasteBinWithErrors = new ArrayList<>();
-        static List<String> ticketsNotifications = new ArrayList<>();
-
-        static void notifyTicketOutcome() {
-            System.out.println("PasteBin tickets that weren't posted due to errors:");
-            for (String s : ticketsNotificationsWithPasteBinWithErrors) {
-                System.out.println(s);
-            }
-            System.out.println("\nPasteBin tickets:");
-            for (String s : ticketsNotificationsWithPasteBin) {
-                System.out.println(s);
-            }
-            System.out.println("\nNormal tickets:");
-            for (String s : ticketsNotifications) {
-                System.out.println(s);
-            }
-        }
-    }
-
     private OutputManager() {
         throw new AssertionError("Class OutputManager should never be instantiated!");
     }
@@ -130,6 +109,35 @@ public class OutputManager {
             builder.replace(index, index + from.length(), to);
             index += to.length();
             index = builder.indexOf(from, index);
+        }
+    }
+
+    private static class OutputNotifier {
+        static List<String> ticketsNotificationsWithPasteBin = new ArrayList<>();
+        static List<String> ticketsNotificationsWithPasteBinWithErrors = new ArrayList<>();
+        static List<String> ticketsNotifications = new ArrayList<>();
+
+        static void notifyTicketOutcome() {
+            if (ticketsNotificationsWithPasteBinWithErrors.size() > 0) {
+                System.out.println("PasteBin tickets that weren't posted due to errors:");
+                for (String s : ticketsNotificationsWithPasteBinWithErrors) {
+                    System.out.println(s);
+                }
+            }
+
+            if (ticketsNotificationsWithPasteBin.size() > 0) {
+                System.out.println("\nPasteBin tickets:");
+                for (String s : ticketsNotificationsWithPasteBin) {
+                    System.out.println(s);
+                }
+            }
+
+            if (ticketsNotifications.size() > 0) {
+                System.out.println("\nNormal tickets:");
+                for (String s : ticketsNotifications) {
+                    System.out.println(s);
+                }
+            }
         }
     }
 
