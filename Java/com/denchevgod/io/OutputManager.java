@@ -18,8 +18,7 @@ public class OutputManager {
         throw new AssertionError("Class OutputManager should never be instantiated!");
     }
 
-    public static void createTickets(Set<InfectedUser> infectedUsers)
-            throws IOException {
+    public static void createTickets(Set<InfectedUser> infectedUsers) throws IOException {
         String outputFullDirectory = System.getProperty("user.dir") + File.separator + Config.SETTINGS.getOption("outputDirectory");
         int maxScanFiles = (int) Config.SETTINGS.getOption("maxScanFiles");
 
@@ -61,6 +60,7 @@ public class OutputManager {
         if ((boolean) Config.SETTINGS.getOption("usePasteBin") && infectedUser.malwareFilesCount() > maxScanFiles) {
             try { // If it does and we're using a PasteBin site - attempt to post the scans online
                 malwareListPlaceholderReplacer = PasteEEPoster.postScanOnline(infectedUser);
+                System.out.println("Created a PasteBin ticket for user " + infectedUser.getUserName());
             } catch (Exception e) { // If the scans aren't posted inform the user and create list the files in the ticket
                 System.err.println("Ticket for " + infectedUser.getUserName() + " cannot be posted to the PasteBin site. Creating in a ticket file locally");
                 malwareListPlaceholderReplacer = infectedUser.listMalwareFiles();
