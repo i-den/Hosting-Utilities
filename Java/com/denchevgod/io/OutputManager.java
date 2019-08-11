@@ -10,9 +10,32 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class OutputManager {
+
+    private static class OutputNotifier {
+        static List<String> ticketsNotificationsWithPasteBin = new ArrayList<>();
+        static List<String> ticketsNotificationsWithPasteBinWithErrors = new ArrayList<>();
+        static List<String> ticketsNotifications = new ArrayList<>();
+
+        static void notifyTicketOutcome() {
+            System.out.println("PasteBin tickets that weren't posted due to errors:");
+            for (String s : ticketsNotificationsWithPasteBinWithErrors) {
+                System.out.println(s);
+            }
+            System.out.println("\nPasteBin tickets:");
+            for (String s : ticketsNotificationsWithPasteBin) {
+                System.out.println(s);
+            }
+            System.out.println("\nNormal tickets:");
+            for (String s : ticketsNotifications) {
+                System.out.println(s);
+            }
+        }
+    }
 
     private OutputManager() {
         throw new AssertionError("Class OutputManager should never be instantiated!");
@@ -40,6 +63,7 @@ public class OutputManager {
                 throw new IOException("Cannot create the ticket file " + fileToWriteRealpath);
             }
         }
+        OutputNotifier.notifyTicketOutcome();
     }
 
     private static StringBuilder replaceDefaultTemplate(InfectedUser infectedUser,
@@ -60,13 +84,14 @@ public class OutputManager {
         if ((boolean) Config.SETTINGS.getOption("usePasteBin") && infectedUser.malwareFilesCount() > maxScanFiles) {
             try { // If it does and we're using a PasteBin site - attempt to post the scans online
                 malwareListPlaceholderReplacer = PasteEEPoster.postScanOnline(infectedUser);
-                System.out.println("Created a PasteBin ticket for user " + infectedUser.getUserName());
+                OutputNotifier.ticketsNotificationsWithPasteBin.add(infectedUser.getUserName() + " : " + infectedUser.malwareFilesCount());
             } catch (Exception e) { // If the scans aren't posted inform the user and create list the files in the ticket
-                System.err.println("Ticket for " + infectedUser.getUserName() + " cannot be posted to the PasteBin site. Creating in a ticket file locally");
                 malwareListPlaceholderReplacer = infectedUser.listMalwareFiles();
+                OutputNotifier.ticketsNotificationsWithPasteBinWithErrors.add(e.getMessage() + "\n" + infectedUser.getUserName() + " : " + infectedUser.malwareFilesCount());
             }
         } else { // Create the ticket by listing the files in it, without using a PasteBin site
             malwareListPlaceholderReplacer = infectedUser.listMalwareFiles();
+            OutputNotifier.ticketsNotifications.add(infectedUser.getUserName() + " : " + infectedUser.malwareFilesCount());
         }
 
         // Replace the Malware files String in the template with the User's malware files list
