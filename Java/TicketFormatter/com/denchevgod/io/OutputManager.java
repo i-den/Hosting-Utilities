@@ -10,9 +10,7 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class OutputManager {
 
@@ -63,14 +61,14 @@ public class OutputManager {
         if ((boolean) Config.SETTINGS.getOption("usePasteBin") && infectedUser.malwareFilesCount() > maxScanFiles) {
             try { // If it does and we're using a PasteBin site - attempt to post the scans online
                 malwareListPlaceholderReplacer = PasteEEPoster.postScanOnline(infectedUser);
-                OutputNotifier.ticketsNotificationsWithPasteBin.add(infectedUser.getUserName() + " : " + infectedUser.malwareFilesCount());
+                OutputNotifier.pasteBinNormals.put(infectedUser.getUserName(), infectedUser.malwareFilesCount());
             } catch (Exception e) { // If the scans aren't posted inform the user and create list the files in the ticket
                 malwareListPlaceholderReplacer = infectedUser.listMalwareFiles();
-                OutputNotifier.ticketsNotificationsWithPasteBinWithErrors.add(e.getMessage() + "\n" + infectedUser.getUserName() + " : " + infectedUser.malwareFilesCount());
+                OutputNotifier.pasteBinErrors.put(infectedUser.getUserName(), infectedUser.malwareFilesCount());
             }
         } else { // Create the ticket by listing the files in it, without using a PasteBin site
             malwareListPlaceholderReplacer = infectedUser.listMalwareFiles();
-            OutputNotifier.ticketsNotifications.add(infectedUser.getUserName() + " : " + infectedUser.malwareFilesCount());
+            OutputNotifier.normals.put(infectedUser.getUserName(), infectedUser.malwareFilesCount());
         }
 
         // Replace the Malware files String in the template with the User's malware files list
@@ -113,30 +111,28 @@ public class OutputManager {
     }
 
     private static class OutputNotifier {
-        static List<String> ticketsNotificationsWithPasteBin = new ArrayList<>();
-        static List<String> ticketsNotificationsWithPasteBinWithErrors = new ArrayList<>();
-        static List<String> ticketsNotifications = new ArrayList<>();
+        static Map<String, Integer>  pasteBinErrors = new HashMap<>();
+        static Map<String, Integer>  pasteBinNormals = new HashMap<>();
+        static Map<String, Integer>  normals = new HashMap<>();
 
         static void notifyTicketOutcome() {
-            if (ticketsNotificationsWithPasteBinWithErrors.size() > 0) {
-                System.out.println("PasteBin tickets that weren't posted due to errors:");
-                for (String s : ticketsNotificationsWithPasteBinWithErrors) {
-                    System.out.println(s);
-                }
-            }
+            notifyTicketOutcome(pasteBinErrors, "PasteBin Tickets that didn't get created due to errors:");
+            notifyTicketOutcome(pasteBinNormals, "PasteBin Created Tickets");
+            notifyTicketOutcome(normals, "Normal Tickets");
+        }
 
-            if (ticketsNotificationsWithPasteBin.size() > 0) {
-                System.out.println("\nPasteBin tickets:");
-                for (String s : ticketsNotificationsWithPasteBin) {
-                    System.out.println(s);
-                }
-            }
-
-            if (ticketsNotifications.size() > 0) {
-                System.out.println("\nNormal tickets:");
-                for (String s : ticketsNotifications) {
-                    System.out.println(s);
-                }
+        static void notifyTicketOutcome(Map<String, Integer> map, String msg) {
+            if (!map.isEmpty()) {
+                System.out.println(msg);
+                map.entrySet().stream()
+                        .sorted(((o1, o2) -> { // 1> Val - Desc, 2>> Key - Asc
+                            int valCmp = o2.getValue().compareTo(o1.getValue());
+                            if (valCmp == 0) {
+                                return o1.getKey().compareTo(o2.getKey());
+                            }
+                            return valCmp;
+                        }))
+                        .forEach(e -> System.out.printf("|%16s - %-4d|%n", e.getKey(), e.getValue()));
             }
         }
     }
