@@ -25,7 +25,7 @@ public final class InputManager {
             File[] listedFiles = Arrays.stream(Objects.requireNonNull(new File(".").listFiles()))
                     .filter(f -> !f.isDirectory())
                     .toArray(File[]::new);
-
+            // Asserts that the entered number is within the listed ones
             return ensureFileIsWithinArray(listedFiles);
         } catch (NullPointerException e) {
             throw new NoFilesInDirectoryException("The program's directory does not contain any files!");
@@ -43,7 +43,7 @@ public final class InputManager {
         try {
             // Return the File object from the File[] array using the User Input's index
             return listedFiles[Integer.parseInt(scanner.nextLine()) - 1]; // Listed are with an index of +1
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException e) { // If a number which is not listed is entered - repeat the process
             System.err.println("Incorrect number, try again!");
             ensureFileIsWithinArray(listedFiles);
         }

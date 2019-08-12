@@ -1,6 +1,9 @@
 package com.denchevgod;
 
-import com.denchevgod.io.*;
+
+import com.denchevgod.io.InputManager;
+import com.denchevgod.io.OutputManager;
+import com.denchevgod.io.NoFilesInDirectoryException;
 import com.denchevgod.malware.InfectedUser;
 import com.denchevgod.malware.MalwareManager;
 
@@ -11,7 +14,6 @@ import java.util.Set;
 public class TicketParser {
 
     public static void main(String[] args) {
-
         try {
             File scanFile = InputManager.getScanFileFromUserInput();
             Set<InfectedUser> infectedUsers = MalwareManager.getInfectedUsersFromScanFile(scanFile);

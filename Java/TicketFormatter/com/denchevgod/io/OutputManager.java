@@ -18,11 +18,19 @@ public class OutputManager {
         throw new AssertionError("Class OutputManager should never be instantiated!");
     }
 
+    /**
+     *
+     * Creates a ticket template file for each InfectedUser and stores it on the file system
+     *
+     * @param infectedUsers A set of InfectedUser objects that contain each User's name and its list of infected files
+     * @throws IOException if it cannot create a ticket file, the file is created in
+     * /program/root/dir/${outputDirectory}/user-ticket.txt
+     */
     public static void createTickets(Set<InfectedUser> infectedUsers) throws IOException {
         String outputFullDirectory = System.getProperty("user.dir") + File.separator + Config.SETTINGS.getOption("outputDirectory");
         int maxScanFiles = (int) Config.SETTINGS.getOption("maxScanFiles");
 
-        new File(outputFullDirectory).mkdirs();
+        new File(outputFullDirectory).mkdirs(); // Try to make the output directory if it's not created yet
         for (InfectedUser infectedUser : infectedUsers) {
             // Get the template for the current Infected User
             StringBuilder template = replaceDefaultTemplate(
@@ -43,6 +51,18 @@ public class OutputManager {
         OutputNotifier.notifyTicketOutcome();
     }
 
+    /**
+     *
+     * Replaces the default template with the Infected User's specific information (User Name and Scanned Files)
+     *
+     * @param infectedUser the Infected User object whose information will be used in the template
+     * @param maxScanFiles the amount of maximum scanned files that should be present,
+     *                     if above this number - a PasteBin site will be used
+     * @param templateUserNameToReplace the String used in the template that will be replaced with the Infected User object's User Name
+     * @param templateMalwareFilesToReplace the String that will be replaced with the Infected User object's scanned files
+     * @return the replaced template in a StringBuilder object
+     * @throws TemplateFileMissingException if the template file located at /program/root/dir/conf/template.txt is missing
+     */
     private static StringBuilder replaceDefaultTemplate(InfectedUser infectedUser,
                                                         int maxScanFiles,
                                                         String templateUserNameToReplace,
@@ -50,9 +70,9 @@ public class OutputManager {
             throws TemplateFileMissingException {
 
         // Loading the default Template that should be in the conf/template.txt
-        StringBuilder replacedTemplate = loadDefaultTemplate();
+        StringBuilder template = loadDefaultTemplate();
         stringBuilderReplaceAll( // Replaces the Infected User Name in the template with the current user's
-                replacedTemplate, templateUserNameToReplace, infectedUser.getUserName()
+                template, templateUserNameToReplace, infectedUser.getUserName()
         );
 
         // Initiate the String that will be used for the Malware files. Either an URL or the files listed
@@ -73,9 +93,9 @@ public class OutputManager {
 
         // Replace the Malware files String in the template with the User's malware files list
         stringBuilderReplaceAll(
-                replacedTemplate, templateMalwareFilesToReplace, malwareListPlaceholderReplacer
+                template, templateMalwareFilesToReplace, malwareListPlaceholderReplacer
         );
-        return replacedTemplate;
+        return template;
     }
 
     /**
@@ -110,6 +130,9 @@ public class OutputManager {
         }
     }
 
+    /**
+     * Simple class grouping System.out messages
+     */
     private static class OutputNotifier {
         static Map<String, Integer>  pasteBinErrors = new HashMap<>();
         static Map<String, Integer>  pasteBinNormals = new HashMap<>();
@@ -125,13 +148,13 @@ public class OutputManager {
             if (!map.isEmpty()) {
                 System.out.println(msg);
                 map.entrySet().stream()
-                        .sorted(((o1, o2) -> { // 1> Val - Desc, 2>> Key - Asc
+                        .sorted(((o1, o2) -> { // 1st by Val - Desc, then by Key - Asc
                             int valCmp = o2.getValue().compareTo(o1.getValue());
                             if (valCmp == 0) {
                                 return o1.getKey().compareTo(o2.getKey());
                             }
                             return valCmp;
-                        }))
+                        })) // 16 - cPanel max name len
                         .forEach(e -> System.out.printf("|%16s - %-4d|%n", e.getKey(), e.getValue()));
             }
         }
