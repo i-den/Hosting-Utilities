@@ -1,6 +1,3 @@
-<p align="center"><img src="https://cpng.pikpng.com/pngl/s/419-4193606_logo-de-cpanel-cpanel-logo-clipart.png"></img></p>
-
-
 ##### 1. Navigate to cPanel -> Select PHP Version
 <img src="https://camo.githubusercontent.com/9509b9726f804458c90e52ffa926fd2c975b6d18/68747470733a2f2f692e696d6775722e636f6d2f614142426f364f2e706e67">
 
